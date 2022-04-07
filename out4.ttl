@@ -1,7 +1,0 @@
-<http://www.cw.org/prob4A><http://www.cw.org/testPredA><http://www.cw.org/prob4B> .
-<http://www.cw.org/prob4B><http://www.cw.org/testPredA><http://www.cw.org/prob4C> .
-<http://www.cw.org/prob4C><http://www.cw.org/testPredB><http://www.cw.org/prob4D> .
-<http://www.cw.org/prob4D><http://www.cw.org/testPredB><http://www.cw.org/prob4E> .
-<http://www.cw.org/prob4E><http://www.cw.org/testPredC><http://www.cw.org/prob4F> .
-<http://www.cw.org/prob4F><http://www.cw.org/testPredC><http://www.cw.org/prob4A> .
-
