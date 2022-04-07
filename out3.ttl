@@ -1,5 +1,0 @@
-<http://www.cw.org/testSubA><http://www.cw.org/problem3/#predicate1> true .
-<http://www.cw.org/testSubB><http://www.cw.org/problem3/#predicate2> true .
-<http://www.cw.org/testSubC><http://www.cw.org/problem3/#predicate2> true .
-<http://www.cw.org/testSubC><http://www.cw.org/problem3/#predicate3> true .
-
