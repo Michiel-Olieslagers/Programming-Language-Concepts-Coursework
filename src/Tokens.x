@@ -29,11 +29,12 @@ $white+       ;
 \<            {\p s -> Comparison p}
 \>=           {\p s -> Comparison p}
 \<=           {\p s -> Comparison p}
+$digit        {\p s -> Character p}
 $digit+       {\p s -> Integer p}
---Is one digit a character or Integer? 
 $alpha        {\p s -> Character p}
 $alpha+       {\p s -> String p}
-\.            {\p s -> File p}
+$alpha+ \. $alpha+           {\p s -> File p}
+$digit+ \. $alpha+           {\p s -> File p}
 
 {
 
