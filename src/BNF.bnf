@@ -1,16 +1,26 @@
-<Digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-<Integer> ::= <Digit> | <Integer><Digit>
-<Alpha> ::= "a" | "A" | "b" | "B" | "c" | "C" | "d" | "D" | "e" | "E" | "f" | "F" | "g" | "G" | "h" | "H" | "i" | "I" | "j" | "J" | "k" | "K" | "l" | "L" | "m" | "M" | "n" | "N" | "o" | "O" | "p" | "P" | "q" | "Q" | "r" | "R" | "s" | "S" | "t" | "T" | "u" | "U" | "v" | "V" | "w" | "W" | "x" | "X" | "y" | "Y" | "z" | "Z"
+<Digit> ::= [0-9]
+<Integer> ::= <Digit>*
+<Alpha> ::= [a-zA-Z]
 <Character> ::= <Integer> | <Alpha>
-<String> ::= <Character> | <String><Character>
+<String> ::= <Character>*
+<Boolean> ::= 'true' | 'false'
 
-<Comparison> ::= == | != | > | < | >= | <=
-<BooleanOperator> ::= && | || | !
-<Boolean> ::= true | false
+<Comparison> ::= '==' | '!=' | '>' | '<' | '>=' | '<='
+<BooleanOperator> ::= '&&' | '||' | '!'
+<NumericalOperator> ::= '+' | '-' | '*' | '/' | '%' | '^'
+<Operator> ::= <BooleanOperator> | <NumericalOperator>
 
-<Item> ::= Subj | Obj | Pred | <Item> <Item>
-<File> ::= <String>.<String>
+<Item> ::= Subj | Obj | Pred | <Item>*
+<File> ::= <String>'.'<String>
 <Predicate> ::= <Item><Comparison><String> | <Predicate><BooleanOperator><Predicate>
 
-<Exp> ::= SELECT <Item> FROM <File> WHERE <Predicate> ORDERBY <Item> | SELECT <Item> FROM <File> WHERE <Predicate> | SELECT <Item> FROM <File>
+<Query> ::= 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> 'ORDERBY' <Item> | 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> | 'SELECT' <Item> 'FROM' <File>
+<Exp> ::= <Query> | 'CREATE' <File> | 'INSERT' <Query> 'INTO' <File>
 
+<Identifier> ::= <Alpha><String>
+<Value> ::= <Query> | <String> | <Integer> | <Boolean>
+<Modifer> ::= <Operator><Value>
+<Variable> ::= <Identifier>
+<VariableAssignement> ::= <Variable>'='<Value><Modifer>*
+<Referencable> ::= <File> | <Variable>
+<Reference> ::= <Referencable>'.Subj' | <Referencable>.'Obj' | <Referencable>.'Pred'
