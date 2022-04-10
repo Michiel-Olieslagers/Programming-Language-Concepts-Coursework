@@ -9,7 +9,7 @@ main = getTokens
 
 getTokens :: IO ()
 getTokens = do path <- getArgs
-               contents <- readFile (path!!0)
+               contents <- readFile (head path)
                let var = alexScanTokens contents
                print var
          
