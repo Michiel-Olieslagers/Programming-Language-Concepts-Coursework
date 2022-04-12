@@ -7,43 +7,59 @@ import TurtleLex
 %tokentype { Token } 
 %error { parseError }
 %token 
-    int { TokenInt $$ } 
-    tag { TokenTag $$ } 
-    lit { TokenLit $$ } 
-    bool { TokenBool $$ } 
-    name { TokenName $$ }
-    pre { TokenPre $$ }
-    at { TokenAt $$ }
-    '+' { TokenPos } 
-    '-' { TokenNeg } 
-    '/' { TokenDiv } 
-    '.' { TokenEnd } 
-    ';' { TokenList } 
-    ',' { TokenCom } 
+    int                            { TokenInt $$ _ } 
+    bool                          { TokenBool $$ _ } 
+    var                           { TokenName $$ _ }
+    tag                           { TokenTag $$ _ }
+    pre                            { TokenPre $$ _ }
+    base                             { TokenBase _ }
+    pref                             { TokenPref _ }
+    lit                           { TokenLit $$ _ } 
+    '.'                              { TokenEnd _ } 
+    ';'                             { TokenList _ } 
+    ','                              { TokenCom _ } 
+%%
+Exp : Line Exp {($1:$2)}
+    | Line     {[$1]}
 
-%left '+' '-' 
-%left '*' '/' 
-%% 
-Exp : let var '=' Exp in Exp { Let $2 $4 $6 } 
-    | Exp '+' Exp            { Plus $1 $3 } 
-    | Exp '-' Exp            { Minus $1 $3 } 
-    | Exp '*' Exp            { Times $1 $3 } 
-    | Exp '/' Exp            { Div $1 $3 } 
-    | '(' Exp ')'            { $2 } 
-    | '-' Exp %prec NEG      { Negate $2 } 
-    | int                    { Int $1 } 
-    | var                    { Var $1 } 
+Line : tag List '.'                 { Tag (URI $1) $2 }
+    | pre var List '.'           { Tag (Pre $1 $2) $3 }
+    | base tag '.'                      { BaseDef $2 }
+    | pref pre tag '.'                { PreDef $2 $3 }
+
+Objs : tag ',' Objs                     {((ObjURI $1):$3)}
+     | pre var ',' Objs              {((ObjPre $1 $2):$4)}
+     | bool ',' Objs                     {((Bl $1):$3)}
+     | int ',' Objs                     {((Num $1):$3)}
+     | lit ',' Objs                     {((Lit $1):$3)}
+     | tag                                   {[ObjURI $1]}
+     | bool                                   {[Bl $1]}
+     | lit                                   {[Lit $1]}
+     | int                                   {[Num $1]}
+     | pre var                            {[ObjPre $1 $2]}    
+
+List : tag Objs ';' List           {((URI $1,$2):$4)}
+     | pre var Objs ';' List      {((Pre $1 $2,$3):$5)}
+     | pre var Objs                  {[(Pre $1 $2,$3)]}
+     | tag Objs                        {[(URI $1,$2)]}
     
 { 
 parseError :: [Token] -> a
 parseError _ = error "Parse error" 
-data Exp = Let String Exp Exp 
-         | Plus Exp Exp 
-         | Minus Exp Exp 
-         | Times Exp Exp 
-         | Div Exp Exp 
-         | Negate Exp
-         | Int Int 
-         | Var String 
+data Item = URI String                                 
+          | Pre String String
+          deriving Show 
+data Obj = ObjURI String                                  
+         | Lit String                                  
+         | Bl Bool                                   
+         | Num Int                                   
+         | ObjPre String String
          deriving Show 
+
+type Exp = [Line]
+
+data Line = Tag Item [(Item,[Obj])]                     
+          | BaseDef String                              
+          | PreDef String String
+          deriving Show 
 } 

@@ -1,0 +1,5 @@
+<http://www.cw.org/subjectA> <http://www.cw.org/predicateA> <http://www.cw.org/objectA> .
+@base <http://www.cw.org/> .
+<subjectB> <predicateB> <objectB> .         
+@prefix p: <http://www.cw.org/pprefix/> .
+p:subjectC p:predicateC p:objectC .    
