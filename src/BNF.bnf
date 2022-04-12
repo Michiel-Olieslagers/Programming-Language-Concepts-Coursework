@@ -17,8 +17,6 @@
 <Query> ::= 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> 'ORDERBY' <Item> | 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> | 'SELECT' <Item> 'FROM' <File>
 <Exp> ::= <Query> | 'CREATE' <File> | 'INSERT' <Query> 'INTO' <File> | <VariableAssignement>
 
-SELECT Pred FROM foo.ttl WHERE Subj == "testSubA"
-
 <Identifier> ::= <Alpha><String>
 <Value> ::= <Query> | <String> | <Integer> | <Boolean> | <Variable>
 <Modifer> ::= <Operator><Value>
