@@ -12,10 +12,12 @@
 
 <Item> ::= Subj | Obj | Pred | <Item>*
 <File> ::= <String>'.'<String>
-<Predicate> ::= <Item><Comparison><String> | <Predicate><BooleanOperator><Predicate>
+<Predicate> ::= <Item><Comparison><String> | <Item><Comparison><Reference> | <Predicate><BooleanOperator><Predicate>
 
 <Query> ::= 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> 'ORDERBY' <Item> | 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> | 'SELECT' <Item> 'FROM' <File>
-<Exp> ::= <Query> | 'CREATE' <File> | 'INSERT' <Query> 'INTO' <File>
+<Exp> ::= <Query> | 'CREATE' <File> | 'INSERT' <Query> 'INTO' <File> | <VariableAssignement>
+
+SELECT Pred FROM foo.ttl WHERE Subj == "testSubA"
 
 <Identifier> ::= <Alpha><String>
 <Value> ::= <Query> | <String> | <Integer> | <Boolean>
