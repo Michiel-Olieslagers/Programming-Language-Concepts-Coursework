@@ -20,7 +20,7 @@
 SELECT Pred FROM foo.ttl WHERE Subj == "testSubA"
 
 <Identifier> ::= <Alpha><String>
-<Value> ::= <Query> | <String> | <Integer> | <Boolean>
+<Value> ::= <Query> | <String> | <Integer> | <Boolean> | <Variable>
 <Modifer> ::= <Operator><Value>
 <Variable> ::= <Identifier>
 <VariableAssignement> ::= <Variable>'='<Value><Modifer>*
