@@ -22,6 +22,10 @@ comparison {Comparison $$ _}
 string {String $$ _}
 boolOp {BooleanOperator $$ _}
 numOp {NumericalOperator $$ _}
+identifier {Identifier $$ _}
+referenceSubj {ReferenceSubj $$ _}
+referenceObj {ReferenceObj $$ _}
+referencePred {ReferencePred $$ _}
 
 %%
 Exp : create file               {Crt $2}
@@ -44,15 +48,28 @@ Value: Query                {ValQ $1}
      | int                  {ValI $1}
      | bool                 {ValB $1}
 
+Modifier: boolOp Value    {ModB $1 $2} 
+        | numOp Value     {ModN $1 $2}
+
+Variable: identifier      {Var $1}
+
+VariableAssignment: Variable '=' Value Modifier     {VarAssign $1 $3 $4}
+
+Referenceable: file        {Referencable1 $1}
+             | Variable    {Referencable2 $1}
+
+Reference: Referenceable referenceSubj     {Reference1 $1 $2}
+         | Referenceable referenceObj      {Reference1 $1 $2}
+         | Referenceable referencePred     {Reference1 $1 $2}
 
 { 
 parseError :: [Token] -> a
 parseError _ = error "Parse error" 
 
-
 data Exp = Crt String
          | Insrt Query String
          | Query
+         | VariableAssignment
          deriving Show 
 
 data Query = Slt3 Item String Predicate Item
@@ -63,10 +80,11 @@ data Query = Slt3 Item String Predicate Item
 data Item = Itm1 String
           | Itm2 Item Item
           deriving Show
-          
-data Predicate = Pred2 Item String
+
+data Predicate = Pred1 Item String
+               | Pred2 Item Reference
                | Pred3 Predicate Predicate
-                 deriving Show
+               deriving Show
 
 data Value = ValQ Query
            | ValS String
@@ -78,5 +96,16 @@ data Modifier = ModB String Value
               | ModN String Value
               deriving Show
 
+data Variable = Var String
+              deriving Show
 
+data VariableAssignment = VarAssign Variable Value Modifier
+                         deriving Show
+
+data Referencable = Referencable1 String
+                  | Referencable2 Variable
+                  deriving Show
+
+date Reference = Reference1 Referencable String
+               deriving Show
 } 

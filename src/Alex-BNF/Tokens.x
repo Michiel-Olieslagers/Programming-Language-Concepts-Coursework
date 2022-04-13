@@ -11,6 +11,7 @@ tokens:-
 
 $white+       ;
 "--".*        ;
+--\=            {\p s -> Assignment s p}
 "true"         {\p s -> Boolean True p}
 "false"        {\p s -> Boolean False p}
 \&&           {\p s -> BooleanOperator s p}
@@ -22,9 +23,9 @@ $white+       ;
 \%            {\p s -> NumericalOperator s p}
 \/            {\p s -> NumericalOperator s p}
 \^            {\p s -> NumericalOperator s p}
-".Subj"       {\p s -> Reference s p}
-".Obj"        {\p s -> Reference s p}
-".Pred"       {\p s -> Reference s p}
+".Subj"       {\p s -> ReferenceSubj s p}
+".Obj"        {\p s -> ReferenceObj s p}
+".Pred"       {\p s -> ReferencePred s p}
 "Subj"        {\p s -> Item s p}
 "Obj"         {\p s -> Item s p}
 "Pred"        {\p s -> Item s p}
@@ -41,26 +42,27 @@ $white+       ;
 \<            {\p s -> Comparison s p}
 \>=           {\p s -> Comparison s p}
 \<=           {\p s -> Comparison s p}
-$alpha [$alpha $digit]+      {\p s -> Identifier s p}
 $digit        {\p s -> Character s p}
 $digit+       {\p s -> Integer (read s) p}
 $alpha        {\p s -> Character s p}
 $alpha+       {\p s -> String s p}
 $alpha+ \. $alpha+           {\p s -> File s p}
 $digit+ \. $alpha+           {\p s -> File s p}
+$alpha " " [$alpha $digit]+      {\p s -> Identifier s p}
 
 {
 
 
 
 data Token = 
-  Integer            Int AlexPosn |
+  Integer               Int AlexPosn |
   Character          String AlexPosn |
   String             String AlexPosn |
   Comparison         String AlexPosn |
   BooleanOperator    String AlexPosn |
   NumericalOperator  String AlexPosn |
-  Boolean            Bool AlexPosn |
+  Boolean              Bool AlexPosn |
+  --Assignment         String AlexPosn |
   Item               String AlexPosn |
   File               String AlexPosn |
   Predicate          String AlexPosn |
@@ -72,7 +74,9 @@ data Token =
   From                      AlexPosn |
   Where                     AlexPosn |
   OrderBy                   AlexPosn |
-  Reference          String AlexPosn
+  ReferenceSubj      String AlexPosn |
+  ReferenceObj       String AlexPosn |
+  ReferencePred      String AlexPosn
   deriving (Eq,Show) 
 
 
