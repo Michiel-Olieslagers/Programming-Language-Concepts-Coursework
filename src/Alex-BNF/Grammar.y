@@ -26,86 +26,91 @@ identifier {Identifier $$ _}
 referenceSubj {ReferenceSubj $$ _}
 referenceObj {ReferenceObj $$ _}
 referencePred {ReferencePred $$ _}
+'=' {Assignment _}
 
 %%
-Exp : create file               {Crt $2}
-    | insert Query into file    {Insrt $2 $4}
-    | Query                     {Query}
+Exp: Statement Exp           {($1:$2)}
+   | Statement               {[$1]}
 
-Query: select Item from file where Predicate orderby Item  {Slt3 $2 $4 $6 $8}
-     | select Item from file where Predicate               {Slt2 $2 $4 $6}
-     | select Item from file                               {Slt1 $2 $4}
+Statement : create file                             {CreateFile $2}
+          | insert Query into file                  {InsertQuery $2 $4}
+          | Query                                   {QueryOnly $1}
+          | identifier '=' Value                    {VarAssign $1 $3 []}
+          | identifier '=' Value ModifierList       {VarAssign $1 $3 $4}
 
-Item: item                     {Itm1 $1} 
-    | Item Item                {Itm2 $1 $2}
+Query: select Item from file                               {SelectIF $2 $4}
+     | select Item from file where Predicate               {SelectIFP $2 $4 $6}
+     | select Item from file where Predicate orderby Item  {SelectIFPI $2 $4 $6 $8}
 
+Item: item                     {ItemOnly $1} 
+    | Item Item                {ItemRec $1 $2}
 
-Predicate: Item comparison string           {Pred2 $1 $3}
-         | Predicate boolOp Predicate       {Pred3 $1 $3}
+Predicate: Item comparison string           {PredICS $1 $3}
+         | Item comparison Reference        {PredICR $1 $3}
+         | Predicate boolOp Predicate       {PredPBP $1 $3}
  
-Value: Query                {ValQ $1}
-     | string               {ValS $1}
-     | int                  {ValI $1}
-     | bool                 {ValB $1}
+Value: Query                {QueryVal $1}
+     | string               {StringVal $1}
+     | int                  {IntVal $1}
+     | bool                 {BoolVal $1}
 
-Modifier: boolOp Value    {ModB $1 $2} 
-        | numOp Value     {ModN $1 $2}
+Modifier: boolOp Value    {BoolOpModifier $1 $2} 
+        | numOp Value     {NumOpModifier $1 $2}
 
-Variable: identifier      {Var $1}
+ModifierList: Modifier ModifierList      {[$1] ++ $2}
+            | Modifier                   {[$1]}
 
-VariableAssignment: Variable '=' Value Modifier     {VarAssign $1 $3 $4}
+Referenceable: file          {ReferencableFile $1}
+             | identifier    {ReferencableVariable $1}
 
-Referenceable: file        {Referencable1 $1}
-             | Variable    {Referencable2 $1}
-
-Reference: Referenceable referenceSubj     {Reference1 $1 $2}
-         | Referenceable referenceObj      {Reference1 $1 $2}
-         | Referenceable referencePred     {Reference1 $1 $2}
+Reference: Referenceable referenceSubj     {SubjReference $1}
+         | Referenceable referenceObj      {ObjReference $1}
+         | Referenceable referencePred     {PredReference $1}
 
 { 
 parseError :: [Token] -> a
 parseError _ = error "Parse error" 
 
-data Exp = Crt String
-         | Insrt Query String
-         | Query
-         | VariableAssignment
-         deriving Show 
+type Exp = [Statement]
 
-data Query = Slt3 Item String Predicate Item
-           | Slt2 Item String Predicate
-           | Slt1 Item String 
+
+data Statement = CreateFile String
+               | InsertQuery Query String
+               | QueryOnly Query
+               | VarAssign String Value [Modifier]
+               deriving Show 
+
+data Query = SelectIF Item String 
+           | SelectIFP Item String Predicate
+           | SelectIFPI Item String Predicate Item
            deriving Show
 
-data Item = Itm1 String
-          | Itm2 Item Item
+data Item = ItemOnly String
+          | ItemRec Item Item
           deriving Show
 
-data Predicate = Pred1 Item String
-               | Pred2 Item Reference
-               | Pred3 Predicate Predicate
+data Predicate = PredICS Item String
+               | PredICR Item Reference
+               | PredPBP Predicate Predicate
                deriving Show
 
-data Value = ValQ Query
-           | ValS String
-           | ValI Int
-           | ValB Bool 
+data Value = QueryVal Query
+           | StringVal String
+           | IntVal Int
+           | BoolVal Bool 
            deriving Show
 
-data Modifier = ModB String Value
-              | ModN String Value
+data Modifier = BoolOpModifier String Value
+              | NumOpModifier String Value
               deriving Show
+                        
 
-data Variable = Var String
-              deriving Show
-
-data VariableAssignment = VarAssign Variable Value Modifier
-                         deriving Show
-
-data Referencable = Referencable1 String
-                  | Referencable2 Variable
+data Referencable = ReferencableFile String
+                  | ReferencableVariable String
                   deriving Show
 
-date Reference = Reference1 Referencable String
-               deriving Show
+data Reference = SubjReference Referencable
+               | ObjReference Referencable
+               | PredReference Referencable
+               deriving Show               
 } 
