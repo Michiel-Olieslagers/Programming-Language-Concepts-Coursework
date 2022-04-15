@@ -1,5 +1,5 @@
 { 
-module Tokens where 
+module StqlLex where 
 }
 
 %wrapper "posn" 

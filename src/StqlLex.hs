@@ -2,7 +2,7 @@
 {-# LANGUAGE CPP #-}
 {-# LINE 1 "StqlLex.x" #-}
  
-module Tokens where 
+module StqlLex where 
 
 #if __GLASGOW_HASKELL__ >= 603
 #include "ghcconfig.h"

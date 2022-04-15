@@ -1,5 +1,5 @@
-import Tokens
-import Grammar
+import StqlLex
+import StqlPar
 import System.Environment
 import Control.Exception
 import System.IO

@@ -1,6 +1,6 @@
 {
-module Grammar where
-import Tokens
+module StqlPar where
+import StqlLex
 }
 
 %name parseCalc
