@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-unused-binds -fno-warn-missing-signatures #-}
 {-# LANGUAGE CPP #-}
-{-# LINE 1 "Tokens.x" #-}
+{-# LINE 1 "StqlLex.x" #-}
  
 module Tokens where 
 
@@ -12923,7 +12923,7 @@ alex_actions = array (0 :: Int, 71)
   , (0,alex_action_38)
   ]
 
-{-# LINE 52 "Tokens.x" #-}
+{-# LINE 52 "StqlLex.x" #-}
 
 
 

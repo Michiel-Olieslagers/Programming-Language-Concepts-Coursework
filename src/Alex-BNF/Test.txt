@@ -1,1 +1,0 @@
-SELECT Subj FROM abc.de WHERE Obj == lyz.de.Subj
