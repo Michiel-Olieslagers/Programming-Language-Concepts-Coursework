@@ -23,7 +23,7 @@ data HappyAbsSyn t4 t5 t6 t7 t8 t9 t10 t11 t12 t13
 	| HappyAbsSyn13 t13
 
 happyExpList :: Happy_Data_Array.Array Prelude.Int Prelude.Int
-happyExpList = Happy_Data_Array.listArray (0,81) ([32768,4105,0,16422,0,152,1,0,0,1024,0,8192,0,0,8,0,16384,0,0,0,16422,0,0,0,33304,0,36864,0,0,0,8192,0,0,0,0,4,0,0,0,64,0,0,0,0,12,0,0,0,0,0,0,0,3072,0,0,0,8326,0,33304,0,8192,0,0,0,0,8,0,0,0,0,0,0,0,6144,0,4096,0,32768,0,0,2,16384,288,0,14336,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0
+happyExpList = Happy_Data_Array.listArray (0,80) ([32768,4105,0,16422,0,152,1,0,0,1024,0,8192,0,0,8,0,16384,0,0,0,16422,0,0,0,33304,0,4096,0,0,2,8192,0,0,0,0,4,0,0,0,64,0,0,0,0,12,0,0,0,0,0,0,0,3072,0,0,0,8326,0,33304,0,8192,0,0,0,0,8,0,0,0,0,0,0,0,4096,0,4096,0,32768,0,0,2,16384,288,0,14336,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 	])
 
 {-# NOINLINE happyExpListPerState #-}
@@ -104,11 +104,11 @@ action_11 (9) = happyGoto action_20
 action_11 _ = happyFail (happyExpListPerState 11)
 
 action_12 (21) = happyShift action_18
-action_12 (24) = happyShift action_13
-action_12 (7) = happyGoto action_17
 action_12 _ = happyFail (happyExpListPerState 12)
 
-action_13 _ = happyReduce_11
+action_13 (24) = happyShift action_13
+action_13 (7) = happyGoto action_17
+action_13 _ = happyReduce_12
 
 action_14 (18) = happyShift action_16
 action_14 _ = happyFail (happyExpListPerState 14)
@@ -118,9 +118,7 @@ action_15 _ = happyReduce_3
 action_16 (19) = happyShift action_29
 action_16 _ = happyFail (happyExpListPerState 16)
 
-action_17 (24) = happyShift action_13
-action_17 (7) = happyGoto action_17
-action_17 _ = happyReduce_12
+action_17 _ = happyReduce_11
 
 action_18 (19) = happyShift action_28
 action_18 _ = happyFail (happyExpListPerState 18)
@@ -179,9 +177,7 @@ action_32 _ = happyReduce_20
 
 action_33 _ = happyReduce_22
 
-action_34 (24) = happyShift action_13
 action_34 (25) = happyShift action_38
-action_34 (7) = happyGoto action_17
 action_34 _ = happyFail (happyExpListPerState 34)
 
 action_35 (23) = happyShift action_36
@@ -220,8 +216,6 @@ action_43 _ = happyReduce_25
 action_44 (27) = happyShift action_37
 action_44 _ = happyReduce_15
 
-action_45 (24) = happyShift action_13
-action_45 (7) = happyGoto action_17
 action_45 _ = happyReduce_10
 
 action_46 _ = happyReduce_26
@@ -260,13 +254,13 @@ happyReduction_4 ((HappyTerminal (File happy_var_4 _)) `HappyStk`
 	_ `HappyStk`
 	happyRest)
 	 = HappyAbsSyn5
-		 (InsertQuery happy_var_2 happy_var_4
+		 (Insert happy_var_2 happy_var_4
 	) `HappyStk` happyRest
 
 happyReduce_5 = happySpecReduce_1  5 happyReduction_5
 happyReduction_5 (HappyAbsSyn6  happy_var_1)
 	 =  HappyAbsSyn5
-		 (QueryOnly happy_var_1
+		 (Query happy_var_1
 	)
 happyReduction_5 _  = notHappyAtAll 
 
@@ -325,20 +319,20 @@ happyReduction_10 ((HappyAbsSyn7  happy_var_8) `HappyStk`
 		 (SelectIFPI happy_var_2 happy_var_4 happy_var_6 happy_var_8
 	) `HappyStk` happyRest
 
-happyReduce_11 = happySpecReduce_1  7 happyReduction_11
-happyReduction_11 (HappyTerminal (Item happy_var_1 _))
+happyReduce_11 = happySpecReduce_2  7 happyReduction_11
+happyReduction_11 (HappyAbsSyn7  happy_var_2)
+	(HappyTerminal (Item happy_var_1 _))
 	 =  HappyAbsSyn7
-		 (ItemOnly happy_var_1
+		 ((happy_var_1:happy_var_2)
 	)
-happyReduction_11 _  = notHappyAtAll 
+happyReduction_11 _ _  = notHappyAtAll 
 
-happyReduce_12 = happySpecReduce_2  7 happyReduction_12
-happyReduction_12 (HappyAbsSyn7  happy_var_2)
-	(HappyAbsSyn7  happy_var_1)
+happyReduce_12 = happySpecReduce_1  7 happyReduction_12
+happyReduction_12 (HappyTerminal (Item happy_var_1 _))
 	 =  HappyAbsSyn7
-		 (ItemRec happy_var_1 happy_var_2
+		 ([happy_var_1]
 	)
-happyReduction_12 _ _  = notHappyAtAll 
+happyReduction_12 _  = notHappyAtAll 
 
 happyReduce_13 = happySpecReduce_3  8 happyReduction_13
 happyReduction_13 (HappyTerminal (String happy_var_3 _))
@@ -473,7 +467,7 @@ happyNewToken action sts stk (tk:tks) =
 	Integer happy_dollar_dollar _ -> cont 14;
 	Boolean happy_dollar_dollar _ -> cont 15;
 	Create _ -> cont 16;
-	Insert _ -> cont 17;
+	InsertQuery _ -> cont 17;
 	Into _ -> cont 18;
 	File happy_dollar_dollar _ -> cont 19;
 	Select _ -> cont 20;
@@ -532,22 +526,18 @@ type Exp = [Statement]
 
 
 data Statement = CreateFile String
-               | InsertQuery Query String
-               | QueryOnly Query
+               | Insert Query String
+               | Query Query
                | VarAssign String Value [Modifier]
                deriving Show 
 
-data Query = SelectIF Item String 
-           | SelectIFP Item String Predicate
-           | SelectIFPI Item String Predicate Item
+data Query = SelectIF [String] String 
+           | SelectIFP [String] String Predicate
+           | SelectIFPI [String] String Predicate [String]
            deriving Show
 
-data Item = ItemOnly String
-          | ItemRec Item Item
-          deriving Show
-
-data Predicate = PredICS Item String
-               | PredICR Item Reference
+data Predicate = PredICS [String] String
+               | PredICR [String] Reference
                | PredPBP Predicate Predicate
                deriving Show
 

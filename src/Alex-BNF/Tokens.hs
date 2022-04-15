@@ -12939,7 +12939,7 @@ data Token =
   File               String AlexPosn |
   Predicate          String AlexPosn |
   Create                    AlexPosn |
-  Insert                    AlexPosn |
+  InsertQuery               AlexPosn |
   Into                      AlexPosn |
   Identifier         String AlexPosn |
   Select                    AlexPosn |
@@ -12987,7 +12987,7 @@ alex_action_21 = \p s -> From p
 alex_action_22 = \p s -> Where p
 alex_action_23 = \p s -> OrderBy p
 alex_action_24 = \p s -> Create p
-alex_action_25 = \p s -> Insert p
+alex_action_25 = \p s -> InsertQuery p
 alex_action_26 = \p s -> Into p
 alex_action_27 = \p s -> Comparison s p
 alex_action_28 = \p s -> Comparison s p

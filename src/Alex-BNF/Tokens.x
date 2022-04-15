@@ -34,7 +34,7 @@ $white+       ;
 "WHERE"       {\p s -> Where p}
 "ORDERBY"     {\p s -> OrderBy p}
 "CREATE"      {\p s -> Create p}
-"INSERT"      {\p s -> Insert p}
+"INSERT"      {\p s -> InsertQuery p}
 "INTO"        {\p s -> Into p}
 \==           {\p s -> Comparison s p}
 \!=           {\p s -> Comparison s p} 
@@ -64,7 +64,7 @@ data Token =
   File               String AlexPosn |
   Predicate          String AlexPosn |
   Create                    AlexPosn |
-  Insert                    AlexPosn |
+  InsertQuery               AlexPosn |
   Into                      AlexPosn |
   Identifier         String AlexPosn |
   Select                    AlexPosn |

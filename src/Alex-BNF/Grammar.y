@@ -10,7 +10,7 @@ import Tokens
 int {Integer $$ _}
 bool {Boolean $$ _}
 create {Create _}
-insert {Insert _}
+insert {InsertQuery _}
 into {Into _}
 file {File $$ _}
 select {Select _}
@@ -33,8 +33,8 @@ Exp: Statement Exp           {($1:$2)}
    | Statement               {[$1]}
 
 Statement : create file                             {CreateFile $2}
-          | insert Query into file                  {InsertQuery $2 $4}
-          | Query                                   {QueryOnly $1}
+          | insert Query into file                  {Insert $2 $4}
+          | Query                                   {Query $1}
           | identifier '=' Value                    {VarAssign $1 $3 []}
           | identifier '=' Value ModifierList       {VarAssign $1 $3 $4}
 
@@ -42,8 +42,8 @@ Query: select Item from file                               {SelectIF $2 $4}
      | select Item from file where Predicate               {SelectIFP $2 $4 $6}
      | select Item from file where Predicate orderby Item  {SelectIFPI $2 $4 $6 $8}
 
-Item: item                     {ItemOnly $1} 
-    | Item Item                {ItemRec $1 $2}
+Item: item Item                {($1:$2)}
+    | item                     {[$1]} 
 
 Predicate: Item comparison string           {PredICS $1 $3}
          | Item comparison Reference        {PredICR $1 $3}
@@ -75,22 +75,18 @@ type Exp = [Statement]
 
 
 data Statement = CreateFile String
-               | InsertQuery Query String
-               | QueryOnly Query
+               | Insert Query String
+               | Query Query
                | VarAssign String Value [Modifier]
                deriving Show 
 
-data Query = SelectIF Item String 
-           | SelectIFP Item String Predicate
-           | SelectIFPI Item String Predicate Item
+data Query = SelectIF [String] String 
+           | SelectIFP [String] String Predicate
+           | SelectIFPI [String] String Predicate [String]
            deriving Show
 
-data Item = ItemOnly String
-          | ItemRec Item Item
-          deriving Show
-
-data Predicate = PredICS Item String
-               | PredICR Item Reference
+data Predicate = PredICS [String] String
+               | PredICR [String] Reference
                | PredPBP Predicate Predicate
                deriving Show
 
@@ -113,4 +109,4 @@ data Reference = SubjReference Referencable
                | ObjReference Referencable
                | PredReference Referencable
                deriving Show               
-} 
+}

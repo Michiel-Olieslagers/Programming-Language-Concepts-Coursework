@@ -4,7 +4,6 @@ import System.Environment
 import Control.Exception
 import System.IO
 
-
 main :: IO ()
 main = getTokens
 
@@ -15,4 +14,3 @@ getTokens = do path <- getArgs
                let parseVar = parseCalc (alexScanTokens contents)
                --print var
                print parseVar
-         

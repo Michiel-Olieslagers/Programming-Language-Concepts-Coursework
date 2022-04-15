@@ -1,0 +1,1 @@
+SELECT Subj Obj Pred FROM foo.ttl WHERE Subj == "testSubA" && Obj == "true"
