@@ -447,20 +447,20 @@ parseError :: [Token] -> a
 parseError _ = error "Parse error" 
 data Item = URI String                                 
           | Pre String String
-          deriving Show 
+          deriving (Show,Eq) 
 data Obj = ObjURI String                                  
          | Lit String                                  
          | Bl Bool                                   
          | Num Int                                   
          | ObjPre String String
-         deriving Show 
+         deriving (Show,Eq) 
 
 type Exp = [Line]
 
 data Line = Tag Item [(Item,[Obj])]                     
           | BaseDef String                              
           | PreDef String String
-          deriving Show
+          deriving (Show,Eq)
 {-# LINE 1 "templates/GenericTemplate.hs" #-}
 -- $Id: GenericTemplate.hs,v 1.26 2005/01/14 14:47:22 simonmar Exp $
 
