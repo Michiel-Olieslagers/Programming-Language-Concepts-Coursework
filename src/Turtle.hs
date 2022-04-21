@@ -7,7 +7,7 @@ import TurtlePar
 import Control.Exception
 import Data.List
 
-type Triple = (String,String,Obj)
+type Triple = (String, String, Obj)
 
 getTokens :: [String] -> IO [[Triple]]
 getTokens paths = getData paths
