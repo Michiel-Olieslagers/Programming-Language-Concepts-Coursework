@@ -14,7 +14,6 @@ file {File $$ _}
 select {Select _}
 from {From _}
 where {Where _}
-orderby {OrderBy _}
 item {Item $$ _}
 comparison {Comparison $$ _}
 string {String $$ _}
@@ -37,7 +36,6 @@ Statement : out identifier                          {Out $2}
 
 Query: select Item from file                               {SelectIF $2 $4}
      | select Item from file where Predicate               {SelectIFP $2 $4 $6}
-     | select Item from file where Predicate orderby Item  {SelectIFPI $2 $4 $6 $8}
 
 Item: item Item                {($1:$2)}
     | item                     {[$1]} 
@@ -60,13 +58,13 @@ Modifier: boolOp Value    {BoolOpModifier $1 $2}
 ModifierList: Modifier ModifierList      {[$1] ++ $2}
             | Modifier                   {[$1]}
 
-Reference: identifier referenceSubj     {SubjReference $1}
-         | identifier referenceObj      {ObjReference $1}
-         | identifier referencePred     {PredReference $1}
+Reference: referenceSubj     {SubjReference $1}
+         | referenceObj      {ObjReference $1}
+         | referencePred     {PredReference $1}
 
 { 
 parseError :: [Token] -> a
-parseError _ = error "Parse error" 
+parseError t = error ("Parse error, Tokens: " ++ show t)
 
 type Exp = [Statement]
 
@@ -77,7 +75,6 @@ data Statement = Out String
 
 data Query = SelectIF [String] String 
            | SelectIFP [String] String Predicate
-           | SelectIFPI [String] String Predicate [String]
            deriving Show
 
 data Predicate = PredICS String String

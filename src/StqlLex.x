@@ -11,11 +11,11 @@ tokens:-
 
 $white+       ;
 "--".*        ;
-\=             {\p s -> Assignment p}
-"true"         {\p s -> Boolean True p}
-"false"        {\p s -> Boolean False p}
+\=            {\p s -> Assignment p}
+"true"        {\p s -> Boolean True p}
+"false"       {\p s -> Boolean False p}
 \&&           {\p s -> BooleanOperator s p}
-"||"           {\p s -> BooleanOperator s p}
+"||"          {\p s -> BooleanOperator s p}
 \!            {\p s -> BooleanOperator s p}
 \+            {\p s -> NumericalOperator s p}
 \-            {\p s -> NumericalOperator s p}
@@ -26,13 +26,12 @@ $white+       ;
 "Subj"        {\p s -> Item s p}
 "Obj"         {\p s -> Item s p}
 "Pred"        {\p s -> Item s p}
-\. "Subj"       {\p s -> ReferenceSubj s p}
-\. "Obj"        {\p s -> ReferenceObj s p}
-\. "Pred"       {\p s -> ReferencePred s p}
+$alpha [$alpha $digit]* \.Subj       {\p s -> ReferenceSubj (dropLast 5 s) p}
+$alpha [$alpha $digit]* \.Obj        {\p s -> ReferenceObj (dropLast 4 s) p}
+$alpha [$alpha $digit]* \.Pred       {\p s -> ReferencePred (dropLast 5 s) p}
 "SELECT"      {\p s -> Select p}
 "FROM"        {\p s -> From p}
 "WHERE"       {\p s -> Where p}
-"ORDERBY"     {\p s -> OrderBy p}
 "OUT"         {\p s -> Output p}
 \==           {\p s -> Comparison s p}
 \!=           {\p s -> Comparison s p}
@@ -41,11 +40,11 @@ $white+       ;
 \<            {\p s -> Comparison s p}
 \>=           {\p s -> Comparison s p}
 \<=           {\p s -> Comparison s p}
-$alpha [$alpha $digit]+      {\p s -> Identifier s p}
-\( $alpha [$alpha $digit]+ \)      {\p s -> Identifier s p}
-[$alpha $digit]+ \. $alpha+           {\p s -> File s p}
-$digit+       {\p s -> Integer (read s) p}
-\" $alpha+ \"       {\p s -> String (removeLast (tail s)) p}
+$alpha [$alpha $digit]*          {\p s -> Identifier s p}
+\( $alpha [$alpha $digit]* \)    {\p s -> Identifier s p}
+[$alpha $digit]+ \. $alpha+      {\p s -> File s p}
+$digit+                          {\p s -> Integer (read s) p}
+\" $alpha+ \"                    {\p s -> String (removeLast (tail s)) p}
 
 {
 
@@ -68,7 +67,6 @@ data Token =
   Select                    AlexPosn |
   From                      AlexPosn |
   Where                     AlexPosn |
-  OrderBy                   AlexPosn |
   ReferenceSubj      String AlexPosn |
   ReferenceObj       String AlexPosn |
   ReferencePred      String AlexPosn |
@@ -85,6 +83,9 @@ tokenPosn (Boolean  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
 tokenPosn (Item  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
 tokenPosn (File  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
 tokenPosn (Predicate  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
+
+dropLast :: Int -> String -> String
+dropLast n s = reverse (drop n (reverse s))
 
 removeLast :: String -> String
 removeLast (c:[]) = []

@@ -14,7 +14,7 @@
 <File> ::= <String>'.'<String>
 <Predicate> ::= <Item><Comparison><String> | <Item><Comparison><Reference> | <Predicate><BooleanOperator><Predicate>
 
-<Query> ::= 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> 'ORDERBY' <Item> | 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> | 'SELECT' <Item> 'FROM' <File>
+<Query> ::= 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> | 'SELECT' <Item> 'FROM' <File>
 <Exp> ::= 'OUT' <Variable> | <VariableAssignement>
 
 <Variable> ::= <Alpha><String>

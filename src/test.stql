@@ -1,5 +1,5 @@
 var1 = SELECT Subj Pred Obj FROM foo.ttl WHERE Pred == <http://www.cw.org/testPredList>
-var2 = SELECT Pred Obj FROM bar.ttl WHERE Pred == <http://www.cw.org/predicateA>
+var2 = SELECT Pred Obj FROM bar.ttl WHERE Obj >= var1.Subj
 var3 = true
 var4 = "testingthesevariables"
-OUT var3
+OUT var2

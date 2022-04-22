@@ -21,8 +21,10 @@ main = getTokens
 getTokens :: IO ()
 getTokens = do path <- getArgs
                contents <- readFile (head path)
-               let parseVar = parseCalc (alexScanTokens contents)
+               let lexVar = alexScanTokens contents
+               let parseVar = parseCalc lexVar
                str <- parse [] parseVar
+               print parseVar
                print str
 
 parse :: [(String, Vals)] -> Exp -> IO String
@@ -55,19 +57,18 @@ getQuery (SelectIF fields file) = do triples <- select file
 getQuery (SelectIFP fields file cond) = do triples <- select file
                                            let selected = map (selectItems fields) triples
                                            return (whr selected cond)
-getQuery (SelectIFPI fields file _ _) = do triples <- select file
-                                           return (map (selectItems fields) triples)
 
 --union :: 
 
 whr :: [MaybTripl] -> Predicate -> [MaybTripl]
 whr triples (PredICS ['P', 'r', 'e', 'd'] item ) = filtr triples True (SubPred (removeLast (tail item)))
 whr triples (PredICS ['O', 'b', 'j'] item) | head item == '<' && lst item == '>' = filtr triples True (Object (ObjURI (removeLast (tail item))))
-                                            | item == "false" = filtr triples True (Object (Bl False))
-                                            | item == "true" = filtr triples True (Object (Bl True))
-                                            | checkNothing (readMaybe item) = filtr triples True (Object (Lit item))
-                                            | otherwise = filtr triples True (Object (Num (read item)))
+                                           | item == "false" = filtr triples True (Object (Bl False))
+                                           | item == "true" = filtr triples True (Object (Bl True))
+                                           | checkNothing (readMaybe item) = filtr triples True (Object (Lit item))
+                                           | otherwise = filtr triples True (Object (Num (read item)))
 whr triples (PredICS ['S', 'u', 'b', 'j'] item ) = filtr triples False (SubPred (removeLast (tail item)))
+whr triples (PredICR "Subj" (SubjReference var)) = filtr triples False
 
 checkNothing :: Maybe Int -> Bool
 checkNothing Nothing = True
@@ -81,11 +82,11 @@ lst (x:xs) = lst xs
 filtr :: [MaybTripl] -> Bool -> Itm -> [MaybTripl]
 filtr [] _ _ = []
 filtr (t@(_, _, Just t3):ts) x (Object obj) | t3 == obj = t:filtr ts x (Object obj)
-                                           | otherwise = filtr ts x (Object obj)
+                                            | otherwise = filtr ts x (Object obj)
 filtr (t@(_, Just t2, _):ts) True (SubPred pred) | t2 == pred = t:filtr ts True (SubPred pred)
-                                                | otherwise = filtr ts True (SubPred pred)
+                                                 | otherwise = filtr ts True (SubPred pred)
 filtr (t@(Just t1, _, _):ts) False (SubPred sub) | t1 == sub = t:filtr ts False (SubPred sub)
-                                                | otherwise = filtr ts False (SubPred sub)
+                                                 | otherwise = filtr ts False (SubPred sub)
 filtr _ _ _ = error "Item was not selected from file."
 
 select :: String -> IO [Triple]
