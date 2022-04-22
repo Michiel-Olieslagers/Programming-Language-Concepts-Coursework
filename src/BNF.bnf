@@ -15,12 +15,10 @@
 <Predicate> ::= <Item><Comparison><String> | <Item><Comparison><Reference> | <Predicate><BooleanOperator><Predicate>
 
 <Query> ::= 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> 'ORDERBY' <Item> | 'SELECT' <Item> 'FROM' <File> 'WHERE' <Predicate> | 'SELECT' <Item> 'FROM' <File>
-<Exp> ::= <Query> | 'CREATE' <File> | 'INSERT' <Query> 'INTO' <File> | <VariableAssignement>
+<Exp> ::= 'OUT' <Variable> | <VariableAssignement>
 
-<Identifier> ::= <Alpha><String>
+<Variable> ::= <Alpha><String>
 <Value> ::= <Query> | <String> | <Integer> | <Boolean> | <Variable>
 <Modifer> ::= <Operator><Value>
-<Variable> ::= <Identifier>
 <VariableAssignement> ::= <Variable>'='<Value><Modifer>*
-<Referencable> ::= <File> | <Variable>
-<Reference> ::= <Referencable>'.Subj' | <Referencable>.'Obj' | <Referencable>.'Pred'
+<Reference> ::= <Variable>'.Subj' | <Variable>.'Obj' | <Variable>.'Pred'

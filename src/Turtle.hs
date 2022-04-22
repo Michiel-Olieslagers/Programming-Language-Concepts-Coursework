@@ -1,4 +1,4 @@
-module Turtle (getTokens,Triple,output) where
+module Turtle (getTriples,Triple,output,Obj, MaybTripl) where
 
 import System.Environment
 import System.IO
@@ -7,15 +7,12 @@ import TurtlePar
 import Control.Exception
 import Data.List
 
-type Triple = (String, String, Obj)
+type Triple = (String,String,Obj)
 
-getTokens :: [String] -> IO [[Triple]]
-getTokens paths = getData paths
-               --var <- getData paths
-               --let var2 = foldr (\x y -> x ++ y) [] var
-               --let var3 = out var2
-               --let var4 = (map (\s -> s ++ " . \n") (sort var3))
-               --writeFile "test.ttl" (foldr (\x y -> x ++ y) [] var4)
+type MaybTripl = (Maybe String, Maybe String, Maybe Obj)
+
+getTriples :: [String] -> IO [[Triple]]
+getTriples paths = getData paths
 
 getData :: [String] -> IO [[Triple]]
 getData [] = return []
@@ -25,9 +22,16 @@ getData (x:xs) = do var <- readFile x
                     rest <- getData xs
                     return ((out var3):rest)
 
-output :: [Triple] -> String
+output :: [MaybTripl] -> String
 output [] = []
-output ((t1,t2,t3):ts) = ("<" ++ t1 ++ "><" ++ t2 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
+output ((Just (t1),Just(t2),Just(t3)):ts) = ("<" ++ t1 ++ "><" ++ t2 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
+output ((Just (t1),Just(t2),Nothing):ts) = ("<" ++ t1 ++ "><" ++ t2 ++ "> . \n") ++ output ts
+output ((Just (t1),Nothing,Just(t3)):ts) = ("<" ++ t1 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
+output ((Nothing,Just(t2),Just(t3)):ts) = ("<" ++ t2 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
+output ((Just (t1),Nothing,Nothing):ts) = ("<" ++ t1 ++ "> . \n") ++ output ts
+output ((Nothing,Just(t2),Nothing):ts) = ("<" ++ t2 ++ "> . \n") ++ output ts
+output ((Nothing,Nothing,Just(t3)):ts) = ("<" ++ getObj t3 ++ "> . \n") ++ output ts
+output (_:ts) = output ts
 
 getObj :: Obj -> String
 getObj (ObjURI x) = x

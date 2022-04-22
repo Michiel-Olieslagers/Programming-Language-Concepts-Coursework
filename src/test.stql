@@ -1,1 +1,5 @@
-SELECT Obj FROM foo.ttl
+var1 = SELECT Subj Pred Obj FROM foo.ttl WHERE Pred == <http://www.cw.org/testPredList>
+var2 = SELECT Subj Pred Obj FROM bar.ttl WHERE Pred == var1.Pred
+var3 = true
+var4 = "testingthesevariables"
+OUT var1

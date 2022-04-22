@@ -26,28 +26,26 @@ $white+       ;
 "Subj"        {\p s -> Item s p}
 "Obj"         {\p s -> Item s p}
 "Pred"        {\p s -> Item s p}
-".Subj"       {\p s -> ReferenceSubj s p}
-".Obj"        {\p s -> ReferenceObj s p}
-".Pred"       {\p s -> ReferencePred s p}
+\. "Subj"       {\p s -> ReferenceSubj s p}
+\. "Obj"        {\p s -> ReferenceObj s p}
+\. "Pred"       {\p s -> ReferencePred s p}
 "SELECT"      {\p s -> Select p}
 "FROM"        {\p s -> From p}
 "WHERE"       {\p s -> Where p}
 "ORDERBY"     {\p s -> OrderBy p}
-"CREATE"      {\p s -> Create p}
-"INSERT"      {\p s -> InsertQuery p}
-"INTO"        {\p s -> Into p}
+"OUT"         {\p s -> Output p}
 \==           {\p s -> Comparison s p}
-\!=           {\p s -> Comparison s p} 
+\!=           {\p s -> Comparison s p}
+\< [$alpha $digit \_ \. \: \/]+ \>       {\p s -> Tag s p} 
 \>            {\p s -> Comparison s p}
 \<            {\p s -> Comparison s p}
 \>=           {\p s -> Comparison s p}
 \<=           {\p s -> Comparison s p}
 $alpha [$alpha $digit]+      {\p s -> Identifier s p}
 \( $alpha [$alpha $digit]+ \)      {\p s -> Identifier s p}
-$alpha+ \. $alpha+           {\p s -> File s p}
-$digit+ \. $alpha+           {\p s -> File s p}
+[$alpha $digit]+ \. $alpha+           {\p s -> File s p}
 $digit+       {\p s -> Integer (read s) p}
-\" $alpha+ \"       {\p s -> String s p}
+\" $alpha+ \"       {\p s -> String (removeLast (tail s)) p}
 
 {
 
@@ -56,6 +54,7 @@ $digit+       {\p s -> Integer (read s) p}
 data Token = 
   Integer               Int AlexPosn |
   String             String AlexPosn |
+  Tag             String AlexPosn |
   Comparison         String AlexPosn |
   BooleanOperator    String AlexPosn |
   NumericalOperator  String AlexPosn |
@@ -63,8 +62,7 @@ data Token =
   Item               String AlexPosn |
   File               String AlexPosn |
   Predicate          String AlexPosn |
-  Create                    AlexPosn |
-  InsertQuery               AlexPosn |
+  Output                    AlexPosn |
   Into                      AlexPosn |
   Identifier         String AlexPosn |
   Select                    AlexPosn |
@@ -87,5 +85,9 @@ tokenPosn (Boolean  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
 tokenPosn (Item  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
 tokenPosn (File  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
 tokenPosn (Predicate  n (AlexPn a l c) ) = show(l) ++ ":" ++ show(c)
+
+removeLast :: String -> String
+removeLast (c:[]) = []
+removeLast (c:cs) = (c:removeLast cs)
 
 }
