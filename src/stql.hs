@@ -61,14 +61,14 @@ getQuery (SelectIFP fields file cond) = do triples <- select file
 --union :: 
 
 whr :: [MaybTripl] -> Predicate -> [MaybTripl]
-whr triples (PredICS ['P', 'r', 'e', 'd'] item ) = filtr triples True (SubPred (removeLast (tail item)))
-whr triples (PredICS ['O', 'b', 'j'] item) | head item == '<' && lst item == '>' = filtr triples True (Object (ObjURI (removeLast (tail item))))
+whr triples (PredICS "Pred" item ) = filtr triples True (SubPred (removeLast (tail item)))
+whr triples (PredICS "Obj" item) | head item == '<' && lst item == '>' = filtr triples True (Object (ObjURI (removeLast (tail item))))
                                            | item == "false" = filtr triples True (Object (Bl False))
                                            | item == "true" = filtr triples True (Object (Bl True))
                                            | checkNothing (readMaybe item) = filtr triples True (Object (Lit item))
                                            | otherwise = filtr triples True (Object (Num (read item)))
-whr triples (PredICS ['S', 'u', 'b', 'j'] item ) = filtr triples False (SubPred (removeLast (tail item)))
-whr triples (PredICR "Subj" (SubjReference var)) = filtr triples False
+whr triples (PredICS "Subj" item ) = filtr triples False (SubPred (removeLast (tail item)))
+--whr triples (PredICR "Subj" (SubjReference var)) = filtr triples False
 
 checkNothing :: Maybe Int -> Bool
 checkNothing Nothing = True
