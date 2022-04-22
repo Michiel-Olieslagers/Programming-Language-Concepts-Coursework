@@ -7,24 +7,24 @@ import Turtle
 import TurtlePar (Obj(ObjURI, Lit, Bl, Num, ObjPre))
 
 main :: IO ()
-main = do --contents <- getTokens ["foo.ttl"]
-          --print contents
-        --   path <- getArgs
-        --   contents <- readFile (head path)
-        --   let parseVar = parseCalc (alexScanTokens contents)
-        --   print parseVar
-          path <- getArgs
-          fields <- getFields ["Subj", "Pred", "Obj"] (head path)
-          print fields
+main = do path <- getArgs
+          contents <- readFile (head path)
+          out <- eval (parseCalc (alexScanTokens contents))
+          print out
 
-eval ((CreateFile f):es) = []
-eval ((Insert q f):es) = []
-eval ((Query q):es) = []
-eval ((VarAssign i v mf):es) = []
+eval :: [Statement] -> IO [String]
+-- eval ((CreateFile f):es) = []
+-- eval ((Insert q f):es) = []
+eval ((Query q):es) = do x <- evalQuery q
+                         xs <- eval es
+                         return (x ++ xs)
+eval [] = do return []
+-- eval ((VarAssign i v mf):es) = []
 
-evalQuery (SelectIF fields file) = 0
-evalQuery (SelectIFP fields file pred) = 0
-evalQuery (SelectIFPI fields file pred order) = 0
+evalQuery :: Query -> IO [String]
+evalQuery (SelectIF fields file) = do getFields fields file
+-- evalQuery (SelectIFP fields file pred) = 0
+-- evalQuery (SelectIFPI fields file pred order) = 0
 
 unpackObject :: Obj -> String
 unpackObject (ObjURI s) = s
@@ -45,5 +45,4 @@ selectItems _ _ = error "Incorrect Items/Item Order in Select STM."
 
 getFields :: [String] -> String -> IO [String]
 getFields fields file = do contents <- getTokens [file]
-                           let out = map (selectItems fields) (head contents)
-                           return out
+                           return (map (selectItems fields) (head contents))
