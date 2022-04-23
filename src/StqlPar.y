@@ -8,18 +8,33 @@ import StqlLex
 %error { parseError }
 %token
 int {Integer $$ _}
-bool {Boolean $$ _}
+trueBool {TrueBool $$ _} 
+falseBool {FalseBool $$ _} 
 out {Output _}
 file {File $$ _}
 select {Select _}
 from {From _}
 where {Where _}
-item {Item $$ _}
-comparison {Comparison $$ _}
+subjItem {SubjItem $$ _} 
+objItem {ObjItem $$ _} 
+PredItem {PredItem $$ _} 
+equal {Equal $$ _} 
+notEqual {NotEqual $$ _} 
+greaterThan {GreaterThan $$ _} 
+lessThan {LessThan $$ _} 
+greaterThanEqual {GreaterThanEqual $$ _} 
+lessThanEqual {LessThanEqual $$ _} 
 string {String $$ _}
 tag {Tag $$ _}
-boolOp {BooleanOperator $$ _}
-numOp {NumericalOperator $$ _}
+andBoolOp {AndBooleanOperator $$ _} 
+orBoolOp {OrBooleanOperator $$ _} 
+notBoolOp {NotBooleanOperator $$ _} 
+plusNumOp {PlusNumericalOperator $$ _}
+minusNumOp {MinusNumericalOperator $$ _}
+timesNumOp {MultiplyNumericalOperator $$ _}
+modNumOp {ModNumericalOperator $$ _}
+divNumOp {DivNumericalOperator $$ _}
+powerNumOp {PowerNumericalOperator $$ _} 
 identifier {Identifier $$ _}
 referenceSubj {ReferenceSubj $$ _}
 referenceObj {ReferenceObj $$ _}
@@ -34,26 +49,72 @@ Statement : out identifier                          {Out $2}
           | identifier '=' Value                    {VarAssign $1 $3 []}
           | identifier '=' Value ModifierList       {VarAssign $1 $3 $4}
 
-Query: select Item from file                               {SelectIF $2 $4}
-     | select Item from file where Predicate               {SelectIFP $2 $4 $6}
+Query: select Items from file                               {SelectIF $2 $4}
+     | select Items from file where Predicate               {SelectIFP $2 $4 $6}
 
-Item: item Item                {($1:$2)}
-    | item                     {[$1]} 
+Item: subjItem                    {$1}
+    | objItem                     {$1}
+    | PredItem                    {$1} 
 
-Predicate: item comparison string           {PredICS $1 $3}
-         | item comparison tag              {PredICS $1 $3}
-         | item comparison int              {PredICS $1 (show $3)}
-         | item comparison bool              {PredICS $1 (show $3)}
-         | item comparison Reference        {PredICR $1 $3}
-         | Predicate boolOp Predicate       {PredPBP $1 $3}
+Items: Item Items               {($1:$2)}
+     | Item                     {[$1]}
+     
+
+Predicate: Item equal string           {PredICS $1 $3}
+         | Item notEqual string           {PredICS $1 $3}
+         | Item greaterThan string           {PredICS $1 $3}
+         | Item lessThan string           {PredICS $1 $3}
+         | Item greaterThanEqual string           {PredICS $1 $3}
+         | Item lessThanEqual string           {PredICS $1 $3}
+         | Item equal tag              {PredICS $1 $3}
+         | Item notEqual tag              {PredICS $1 $3}
+         | Item greaterThan tag              {PredICS $1 $3}
+         | Item lessThan tag              {PredICS $1 $3}
+         | Item greaterThanEqual tag              {PredICS $1 $3}
+         | Item lessThanEqual tag              {PredICS $1 $3}
+         | Item equal int              {PredICS $1 (show $3)}
+         | Item notEqual int              {PredICS $1 (show $3)}
+         | Item greaterThan int              {PredICS $1 (show $3)}
+         | Item lessThan int              {PredICS $1 (show $3)}
+         | Item greaterThanEqual int              {PredICS $1 (show $3)}
+         | Item lessThanEqual int              {PredICS $1 (show $3)}
+         | Item equal trueBool              {PredICS $1 (show $3)}
+         | Item notEqual trueBool              {PredICS $1 (show $3)}
+         | Item greaterThan trueBool              {PredICS $1 (show $3)}
+         | Item lessThan trueBool              {PredICS $1 (show $3)}
+         | Item greaterThanEqual trueBool              {PredICS $1 (show $3)}
+         | Item lessThanEqual trueBool              {PredICS $1 (show $3)}
+         | Item equal falseBool              {PredICS $1 (show $3)}
+         | Item notEqual falseBool              {PredICS $1 (show $3)}
+         | Item greaterThan falseBool              {PredICS $1 (show $3)}
+         | Item lessThan falseBool              {PredICS $1 (show $3)}
+         | Item greaterThanEqual falseBool              {PredICS $1 (show $3)}
+         | Item lessThanEqual falseBool              {PredICS $1 (show $3)}
+         | Item equal Reference        {PredICR $1 $3}
+         | Item notEqual Reference        {PredICR $1 $3}
+         | Item greaterThan Reference        {PredICR $1 $3}
+         | Item lessThan Reference        {PredICR $1 $3}
+         | Item greaterThanEqual Reference        {PredICR $1 $3}
+         | Item lessThanEqual Reference        {PredICR $1 $3}
+         | Predicate andBoolOp Predicate       {PredPBP $1 $3}
+         | Predicate orBoolOp Predicate       {PredPBP $1 $3}
+         | Predicate notBoolOp Predicate       {PredPBP $1 $3}
  
 Value: Query                {QueryVal $1}
      | string               {StringVal $1}
      | int                  {IntVal $1}
-     | bool                 {BoolVal $1}
+     | trueBool                 {BoolVal $1}
+     | falseBool                 {BoolVal $1}
 
-Modifier: boolOp Value    {BoolOpModifier $1 $2} 
-        | numOp Value     {NumOpModifier $1 $2}
+Modifier: andBoolOp Value    {BoolOpModifier $1 $2}
+        | orBoolOp Value     {BoolOpModifier $1 $2}
+        | notBoolOp Value    {BoolOpModifier $1 $2} 
+        | plusNumOp Value     {NumOpModifier $1 $2}
+        | minusNumOp Value     {NumOpModifier $1 $2}
+        | timesNumOp Value     {NumOpModifier $1 $2}
+        | modNumOp Value     {NumOpModifier $1 $2}
+        | divNumOp Value     {NumOpModifier $1 $2}
+        | powerNumOp Value     {NumOpModifier $1 $2}
 
 ModifierList: Modifier ModifierList      {[$1] ++ $2}
             | Modifier                   {[$1]}
@@ -85,7 +146,7 @@ data Predicate = PredICS String String
 data Value = QueryVal Query
            | StringVal String
            | IntVal Int
-           | BoolVal Bool 
+           | BoolVal Bool
            deriving Show
 
 data Modifier = BoolOpModifier String Value
