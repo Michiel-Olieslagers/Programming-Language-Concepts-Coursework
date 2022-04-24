@@ -60,45 +60,45 @@ Items: Item Items               {($1:$2)}
      | Item                     {[$1]}
      
 
-Predicate: Item equal string           {PredICS $1 $3}
-         | Item notEqual string           {PredICS $1 $3}
-         | Item greaterThan string           {PredICS $1 $3}
-         | Item lessThan string           {PredICS $1 $3}
-         | Item greaterThanEqual string           {PredICS $1 $3}
-         | Item lessThanEqual string           {PredICS $1 $3}
-         | Item equal tag              {PredICS $1 $3}
-         | Item notEqual tag              {PredICS $1 $3}
-         | Item greaterThan tag              {PredICS $1 $3}
-         | Item lessThan tag              {PredICS $1 $3}
-         | Item greaterThanEqual tag              {PredICS $1 $3}
-         | Item lessThanEqual tag              {PredICS $1 $3}
-         | Item equal int              {PredICS $1 (show $3)}
-         | Item notEqual int              {PredICS $1 (show $3)}
-         | Item greaterThan int              {PredICS $1 (show $3)}
-         | Item lessThan int              {PredICS $1 (show $3)}
-         | Item greaterThanEqual int              {PredICS $1 (show $3)}
-         | Item lessThanEqual int              {PredICS $1 (show $3)}
-         | Item equal trueBool              {PredICS $1 (show $3)}
-         | Item notEqual trueBool              {PredICS $1 (show $3)}
-         | Item greaterThan trueBool              {PredICS $1 (show $3)}
-         | Item lessThan trueBool              {PredICS $1 (show $3)}
-         | Item greaterThanEqual trueBool              {PredICS $1 (show $3)}
-         | Item lessThanEqual trueBool              {PredICS $1 (show $3)}
-         | Item equal falseBool              {PredICS $1 (show $3)}
-         | Item notEqual falseBool              {PredICS $1 (show $3)}
-         | Item greaterThan falseBool              {PredICS $1 (show $3)}
-         | Item lessThan falseBool              {PredICS $1 (show $3)}
-         | Item greaterThanEqual falseBool              {PredICS $1 (show $3)}
-         | Item lessThanEqual falseBool              {PredICS $1 (show $3)}
-         | Item equal Reference        {PredICR $1 $3}
-         | Item notEqual Reference        {PredICR $1 $3}
-         | Item greaterThan Reference        {PredICR $1 $3}
-         | Item lessThan Reference        {PredICR $1 $3}
-         | Item greaterThanEqual Reference        {PredICR $1 $3}
-         | Item lessThanEqual Reference        {PredICR $1 $3}
-         | Predicate andBoolOp Predicate       {PredPBP $1 $3}
-         | Predicate orBoolOp Predicate       {PredPBP $1 $3}
-         | Predicate notBoolOp Predicate       {PredPBP $1 $3}
+Predicate: Item equal string                      {PredICS $1 $2 $3}
+         | Item notEqual string                   {PredICS $1 $2 $3}
+         | Item greaterThan string                {PredICS $1 $2 $3}
+         | Item lessThan string                   {PredICS $1 $2 $3}
+         | Item greaterThanEqual string           {PredICS $1 $2 $3}
+         | Item lessThanEqual string              {PredICS $1 $2 $3}
+         | Item equal tag                         {PredICS $1 $2 $3}
+         | Item notEqual tag                      {PredICS $1 $2 $3}
+         | Item greaterThan tag                   {PredICS $1 $2 $3}
+         | Item lessThan tag                      {PredICS $1 $2 $3}
+         | Item greaterThanEqual tag              {PredICS $1 $2 $3}
+         | Item lessThanEqual tag                 {PredICS $1 $2 $3}
+         | Item equal int                         {PredICS $1 $2 (show $3)}
+         | Item notEqual int                      {PredICS $1 $2 (show $3)}
+         | Item greaterThan int                   {PredICS $1 $2 (show $3)}
+         | Item lessThan int                      {PredICS $1 $2 (show $3)}
+         | Item greaterThanEqual int              {PredICS $1 $2 (show $3)}
+         | Item lessThanEqual int                 {PredICS $1 $2 (show $3)}
+         | Item equal trueBool                    {PredICS $1 $2 (show $3)}
+         | Item notEqual trueBool                 {PredICS $1 $2 (show $3)}
+         | Item greaterThan trueBool              {PredICS $1 $2 (show $3)}
+         | Item lessThan trueBool                 {PredICS $1 $2 (show $3)}
+         | Item greaterThanEqual trueBool         {PredICS $1 $2 (show $3)}
+         | Item lessThanEqual trueBool            {PredICS $1 $2 (show $3)}
+         | Item equal falseBool                   {PredICS $1 $2 (show $3)}
+         | Item notEqual falseBool                {PredICS $1 $2 (show $3)}
+         | Item greaterThan falseBool             {PredICS $1 $2 (show $3)}
+         | Item lessThan falseBool                {PredICS $1 $2 (show $3)}
+         | Item greaterThanEqual falseBool        {PredICS $1 $2 (show $3)}
+         | Item lessThanEqual falseBool           {PredICS $1 $2 (show $3)}
+         | Item equal Reference                   {PredICR $1 $2 $3}
+         | Item notEqual Reference                {PredICR $1 $2 $3}
+         | Item greaterThan Reference             {PredICR $1 $2 $3}
+         | Item lessThan Reference                {PredICR $1 $2 $3}
+         | Item greaterThanEqual Reference        {PredICR $1 $2 $3}
+         | Item lessThanEqual Reference           {PredICR $1 $2 $3}
+         | Predicate andBoolOp Predicate          {PredPBP $1 $2 $3}
+         | Predicate orBoolOp Predicate           {PredPBP $1 $2 $3}
+         | Predicate notBoolOp Predicate          {PredPBP $1 $2 $3}
  
 Value: Query                {QueryVal $1}
      | string               {StringVal $1}
@@ -138,9 +138,9 @@ data Query = SelectIF [String] String
            | SelectIFP [String] String Predicate
            deriving Show
 
-data Predicate = PredICS String String
-               | PredICR String Reference
-               | PredPBP Predicate Predicate
+data Predicate = PredICS String String String
+               | PredICR String String Reference
+               | PredPBP Predicate String Predicate
                deriving Show
 
 data Value = QueryVal Query

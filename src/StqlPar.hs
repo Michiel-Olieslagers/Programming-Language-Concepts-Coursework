@@ -556,352 +556,352 @@ happyReduction_12 _  = notHappyAtAll
 
 happyReduce_13 = happySpecReduce_3  9 happyReduction_13
 happyReduction_13 (HappyTerminal (String happy_var_3 _))
-	_
+	(HappyTerminal (Equal happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_13 _ _ _  = notHappyAtAll 
 
 happyReduce_14 = happySpecReduce_3  9 happyReduction_14
 happyReduction_14 (HappyTerminal (String happy_var_3 _))
-	_
+	(HappyTerminal (NotEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_14 _ _ _  = notHappyAtAll 
 
 happyReduce_15 = happySpecReduce_3  9 happyReduction_15
 happyReduction_15 (HappyTerminal (String happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_15 _ _ _  = notHappyAtAll 
 
 happyReduce_16 = happySpecReduce_3  9 happyReduction_16
 happyReduction_16 (HappyTerminal (String happy_var_3 _))
-	_
+	(HappyTerminal (LessThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_16 _ _ _  = notHappyAtAll 
 
 happyReduce_17 = happySpecReduce_3  9 happyReduction_17
 happyReduction_17 (HappyTerminal (String happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_17 _ _ _  = notHappyAtAll 
 
 happyReduce_18 = happySpecReduce_3  9 happyReduction_18
 happyReduction_18 (HappyTerminal (String happy_var_3 _))
-	_
+	(HappyTerminal (LessThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_18 _ _ _  = notHappyAtAll 
 
 happyReduce_19 = happySpecReduce_3  9 happyReduction_19
 happyReduction_19 (HappyTerminal (Tag happy_var_3 _))
-	_
+	(HappyTerminal (Equal happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_19 _ _ _  = notHappyAtAll 
 
 happyReduce_20 = happySpecReduce_3  9 happyReduction_20
 happyReduction_20 (HappyTerminal (Tag happy_var_3 _))
-	_
+	(HappyTerminal (NotEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_20 _ _ _  = notHappyAtAll 
 
 happyReduce_21 = happySpecReduce_3  9 happyReduction_21
 happyReduction_21 (HappyTerminal (Tag happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_21 _ _ _  = notHappyAtAll 
 
 happyReduce_22 = happySpecReduce_3  9 happyReduction_22
 happyReduction_22 (HappyTerminal (Tag happy_var_3 _))
-	_
+	(HappyTerminal (LessThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_22 _ _ _  = notHappyAtAll 
 
 happyReduce_23 = happySpecReduce_3  9 happyReduction_23
 happyReduction_23 (HappyTerminal (Tag happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_23 _ _ _  = notHappyAtAll 
 
 happyReduce_24 = happySpecReduce_3  9 happyReduction_24
 happyReduction_24 (HappyTerminal (Tag happy_var_3 _))
-	_
+	(HappyTerminal (LessThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 happy_var_3
+		 (PredICS happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_24 _ _ _  = notHappyAtAll 
 
 happyReduce_25 = happySpecReduce_3  9 happyReduction_25
 happyReduction_25 (HappyTerminal (Integer happy_var_3 _))
-	_
+	(HappyTerminal (Equal happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_25 _ _ _  = notHappyAtAll 
 
 happyReduce_26 = happySpecReduce_3  9 happyReduction_26
 happyReduction_26 (HappyTerminal (Integer happy_var_3 _))
-	_
+	(HappyTerminal (NotEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_26 _ _ _  = notHappyAtAll 
 
 happyReduce_27 = happySpecReduce_3  9 happyReduction_27
 happyReduction_27 (HappyTerminal (Integer happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_27 _ _ _  = notHappyAtAll 
 
 happyReduce_28 = happySpecReduce_3  9 happyReduction_28
 happyReduction_28 (HappyTerminal (Integer happy_var_3 _))
-	_
+	(HappyTerminal (LessThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_28 _ _ _  = notHappyAtAll 
 
 happyReduce_29 = happySpecReduce_3  9 happyReduction_29
 happyReduction_29 (HappyTerminal (Integer happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_29 _ _ _  = notHappyAtAll 
 
 happyReduce_30 = happySpecReduce_3  9 happyReduction_30
 happyReduction_30 (HappyTerminal (Integer happy_var_3 _))
-	_
+	(HappyTerminal (LessThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_30 _ _ _  = notHappyAtAll 
 
 happyReduce_31 = happySpecReduce_3  9 happyReduction_31
 happyReduction_31 (HappyTerminal (TrueBool happy_var_3 _))
-	_
+	(HappyTerminal (Equal happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_31 _ _ _  = notHappyAtAll 
 
 happyReduce_32 = happySpecReduce_3  9 happyReduction_32
 happyReduction_32 (HappyTerminal (TrueBool happy_var_3 _))
-	_
+	(HappyTerminal (NotEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_32 _ _ _  = notHappyAtAll 
 
 happyReduce_33 = happySpecReduce_3  9 happyReduction_33
 happyReduction_33 (HappyTerminal (TrueBool happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_33 _ _ _  = notHappyAtAll 
 
 happyReduce_34 = happySpecReduce_3  9 happyReduction_34
 happyReduction_34 (HappyTerminal (TrueBool happy_var_3 _))
-	_
+	(HappyTerminal (LessThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_34 _ _ _  = notHappyAtAll 
 
 happyReduce_35 = happySpecReduce_3  9 happyReduction_35
 happyReduction_35 (HappyTerminal (TrueBool happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_35 _ _ _  = notHappyAtAll 
 
 happyReduce_36 = happySpecReduce_3  9 happyReduction_36
 happyReduction_36 (HappyTerminal (TrueBool happy_var_3 _))
-	_
+	(HappyTerminal (LessThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_36 _ _ _  = notHappyAtAll 
 
 happyReduce_37 = happySpecReduce_3  9 happyReduction_37
 happyReduction_37 (HappyTerminal (FalseBool happy_var_3 _))
-	_
+	(HappyTerminal (Equal happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_37 _ _ _  = notHappyAtAll 
 
 happyReduce_38 = happySpecReduce_3  9 happyReduction_38
 happyReduction_38 (HappyTerminal (FalseBool happy_var_3 _))
-	_
+	(HappyTerminal (NotEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_38 _ _ _  = notHappyAtAll 
 
 happyReduce_39 = happySpecReduce_3  9 happyReduction_39
 happyReduction_39 (HappyTerminal (FalseBool happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_39 _ _ _  = notHappyAtAll 
 
 happyReduce_40 = happySpecReduce_3  9 happyReduction_40
 happyReduction_40 (HappyTerminal (FalseBool happy_var_3 _))
-	_
+	(HappyTerminal (LessThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_40 _ _ _  = notHappyAtAll 
 
 happyReduce_41 = happySpecReduce_3  9 happyReduction_41
 happyReduction_41 (HappyTerminal (FalseBool happy_var_3 _))
-	_
+	(HappyTerminal (GreaterThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_41 _ _ _  = notHappyAtAll 
 
 happyReduce_42 = happySpecReduce_3  9 happyReduction_42
 happyReduction_42 (HappyTerminal (FalseBool happy_var_3 _))
-	_
+	(HappyTerminal (LessThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICS happy_var_1 (show happy_var_3)
+		 (PredICS happy_var_1 happy_var_2 (show happy_var_3)
 	)
 happyReduction_42 _ _ _  = notHappyAtAll 
 
 happyReduce_43 = happySpecReduce_3  9 happyReduction_43
 happyReduction_43 (HappyAbsSyn13  happy_var_3)
-	_
+	(HappyTerminal (Equal happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICR happy_var_1 happy_var_3
+		 (PredICR happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_43 _ _ _  = notHappyAtAll 
 
 happyReduce_44 = happySpecReduce_3  9 happyReduction_44
 happyReduction_44 (HappyAbsSyn13  happy_var_3)
-	_
+	(HappyTerminal (NotEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICR happy_var_1 happy_var_3
+		 (PredICR happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_44 _ _ _  = notHappyAtAll 
 
 happyReduce_45 = happySpecReduce_3  9 happyReduction_45
 happyReduction_45 (HappyAbsSyn13  happy_var_3)
-	_
+	(HappyTerminal (GreaterThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICR happy_var_1 happy_var_3
+		 (PredICR happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_45 _ _ _  = notHappyAtAll 
 
 happyReduce_46 = happySpecReduce_3  9 happyReduction_46
 happyReduction_46 (HappyAbsSyn13  happy_var_3)
-	_
+	(HappyTerminal (LessThan happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICR happy_var_1 happy_var_3
+		 (PredICR happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_46 _ _ _  = notHappyAtAll 
 
 happyReduce_47 = happySpecReduce_3  9 happyReduction_47
 happyReduction_47 (HappyAbsSyn13  happy_var_3)
-	_
+	(HappyTerminal (GreaterThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICR happy_var_1 happy_var_3
+		 (PredICR happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_47 _ _ _  = notHappyAtAll 
 
 happyReduce_48 = happySpecReduce_3  9 happyReduction_48
 happyReduction_48 (HappyAbsSyn13  happy_var_3)
-	_
+	(HappyTerminal (LessThanEqual happy_var_2 _))
 	(HappyAbsSyn7  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredICR happy_var_1 happy_var_3
+		 (PredICR happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_48 _ _ _  = notHappyAtAll 
 
 happyReduce_49 = happySpecReduce_3  9 happyReduction_49
 happyReduction_49 (HappyAbsSyn9  happy_var_3)
-	_
+	(HappyTerminal (AndBooleanOperator happy_var_2 _))
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredPBP happy_var_1 happy_var_3
+		 (PredPBP happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_49 _ _ _  = notHappyAtAll 
 
 happyReduce_50 = happySpecReduce_3  9 happyReduction_50
 happyReduction_50 (HappyAbsSyn9  happy_var_3)
-	_
+	(HappyTerminal (OrBooleanOperator happy_var_2 _))
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredPBP happy_var_1 happy_var_3
+		 (PredPBP happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_50 _ _ _  = notHappyAtAll 
 
 happyReduce_51 = happySpecReduce_3  9 happyReduction_51
 happyReduction_51 (HappyAbsSyn9  happy_var_3)
-	_
+	(HappyTerminal (NotBooleanOperator happy_var_2 _))
 	(HappyAbsSyn9  happy_var_1)
 	 =  HappyAbsSyn9
-		 (PredPBP happy_var_1 happy_var_3
+		 (PredPBP happy_var_1 happy_var_2 happy_var_3
 	)
 happyReduction_51 _ _ _  = notHappyAtAll 
 
@@ -1136,9 +1136,9 @@ data Query = SelectIF [String] String
            | SelectIFP [String] String Predicate
            deriving Show
 
-data Predicate = PredICS String String
-               | PredICR String Reference
-               | PredPBP Predicate Predicate
+data Predicate = PredICS String String String
+               | PredICR String String Reference
+               | PredPBP Predicate String Predicate
                deriving Show
 
 data Value = QueryVal Query
