@@ -445,22 +445,29 @@ happySeq = happyDontSeq
 
 parseError :: [Token] -> a
 parseError _ = error "Parse error" 
-data Item = URI String                                 
+data Item = URI String
           | Pre String String
-          deriving (Show,Eq) 
-data Obj = ObjURI String                                  
-         | Lit String                                  
-         | Bl Bool                                   
-         | Num Int                                   
+          deriving (Show,Eq,Ord)
+data Obj = ObjURI String
+         | Lit String
+         | Bl Bool
+         | Num Int
          | ObjPre String String
          deriving (Show,Eq) 
+
+instance Ord Obj where
+	compare (ObjURI a) (ObjURI b) = compare a b
+	compare (Lit a) (Lit b) = compare a b
+	compare (Bl a) (Bl b) = compare a b
+	compare (Num a) (Num b) = compare a b
+	compare (ObjPre a1 a2) (ObjPre b1 b2) = compare a1 b1
 
 type Exp = [Line]
 
 data Line = Tag Item [(Item,[Obj])]                     
           | BaseDef String                              
           | PreDef String String
-          deriving (Show,Eq)
+          deriving (Show,Eq,Ord)
 {-# LINE 1 "templates/GenericTemplate.hs" #-}
 -- $Id: GenericTemplate.hs,v 1.26 2005/01/14 14:47:22 simonmar Exp $
 

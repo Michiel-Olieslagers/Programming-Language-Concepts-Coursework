@@ -1,4 +1,4 @@
-module Turtle (getTriples,Triple,output,Obj, MaybTripl) where
+module Turtle (getObj, getTriples,Triple,output,Obj, MaybTripl) where
 
 import System.Environment
 import System.IO
