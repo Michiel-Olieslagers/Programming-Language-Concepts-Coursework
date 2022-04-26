@@ -16,6 +16,7 @@ data Vals = Trpl [MaybTripl]
 data Itm = Object Obj
          | Sub String
          | Pred String
+         deriving (Show)
 
 main :: IO ()
 main = getTokens
@@ -26,7 +27,9 @@ getTokens = do path <- getArgs
                let lexVar = alexScanTokens contents
                let parseVar = parseCalc lexVar
                str <- parse [] parseVar
-               --print parseVar
+               turt <- select "foo.ttl"
+               --print lexVar
+               --print turt
                print str
 
 parse :: [(String, Vals)] -> Exp -> IO String
@@ -78,7 +81,8 @@ whr triples (PredICR "Obj" o (ObjReference var)) vars = filtrRef2 triples (getTr
 whr triples (PredICR itm o (SubjReference var)) vars = filtrRef itm triples "Subj" (getTriple $ getVars vars var) (readOp o)
 whr triples (PredICR itm o (PredReference var)) vars = filtrRef itm triples "Pred" (getTriple $ getVars vars var) (readOp o)
 whr triples (PredICR itm o (ObjReference var)) vars = filtrRef itm triples "Obj" (getTriple $ getVars vars var) (readOp o)
-
+whr triples (PredPBP p1 "&&" p2) vars = whr triples p1 vars `intersect` whr triples p2 vars
+whr triples (PredPBP p1 "||" p2) vars = whr triples p1 vars `union` whr triples p2 vars
 
 readOp :: Ord a => String -> a -> a -> Bool
 readOp "==" = (==)
@@ -136,11 +140,11 @@ filtr2 (t@(_, _, Just t3):ts) (Object obj) op | op t3 obj = t:filtr2 ts (Object 
                                               | otherwise = filtr2 ts (Object obj) op
 
 filtr :: [MaybTripl] -> Itm -> (String -> String -> Bool) -> [MaybTripl]
+filtr [] _ _ = []
 filtr (t@(_, Just t2, _):ts) (Pred pred) op | op t2 pred = t:filtr ts (Pred pred) op
-                                                    | otherwise = filtr ts (Pred pred) op
+                                            | otherwise = filtr ts (Pred pred) op
 filtr (t@(Just t1, _, _):ts) (Sub sub) op | op t1 sub = t:filtr ts (Sub sub) op
-                                                    | otherwise = filtr ts (Sub sub) op
-filtr _ _ _ = error "Item was not selected from file."
+                                          | otherwise = filtr ts (Sub sub) op
 
 select :: String -> IO [Triple]
 select s = do tokens <- getTriples [s]
