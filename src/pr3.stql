@@ -1,0 +1,2 @@
+var31 = SELECT Subj Pred Obj FROM foo.ttl WHERE Pred == <http://www.cw.org/problem3/#predicate1" || Pred == <http://www.cw.org/problem3/#predicate2>  || Pred == <http://www.cw.org/problem3/#predicate3> 
+OUT var31

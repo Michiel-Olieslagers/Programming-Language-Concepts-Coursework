@@ -1,0 +1,12 @@
+var51 = SELECT Subj Pred Obj FROM foo.ttl WHERE Obj < 0 || Obj > 99
+SET Pred FROM var51 TO <http://www.cw.org/problem5/#inRange>
+SET Obj FROM var51 TO false
+
+var54 = SELECT Subj Pred Obj FROM foo.ttl WHERE Obj > 0 || Obj < 99
+var55 = SELECT Subj Pred Obj FROM foo.ttl WHERE Obj > 0 || Obj < 99
+SET Obj FROM var54 TO +1
+SET Pred FROM var55 TO <http://www.cw.org/problem5/#inRange>
+SET Obj FROM var55 TO true
+
+var56 = var51 + var54 + var55
+OUT var56
