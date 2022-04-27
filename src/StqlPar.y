@@ -40,14 +40,30 @@ referenceSubj {ReferenceSubj $$ _}
 referenceObj {ReferenceObj $$ _}
 referencePred {ReferencePred $$ _}
 '=' {Assignment _}
+set {Set _}
+in {In _}
+to {To _}
 
 %%
 Exp: Statement Exp           {($1:$2)}
    | Statement               {[$1]}
 
 Statement : out identifier                          {Out $2}
+          | set Item in identifier to Condition     {Cond $2 $4 $6}
           | identifier '=' Value                    {VarAssign $1 $3 []}
           | identifier '=' Value ModifierList       {VarAssign $1 $3 $4}
+
+Condition : tag                                     {TagCond $1}
+          | string                                  {StrCond $1}
+          | plusNumOp int                           {AddCond $2}
+          | minusNumOp int                          {MinusCond $2}
+          | modNumOp int                            {ModCond $2}
+          | timesNumOp int                          {MultCond $2}
+          | divNumOp int                            {DivCond $2}
+          | powerNumOp int                          {PowCond $2}
+          | trueBool                                {BoolCond True}
+          | falseBool                               {BoolCond False}
+          | int                                     {IntCond $1}
 
 Query: select Items from file                               {SelectIF $2 $4}
      | select Items from file where Predicate               {SelectIFP $2 $4 $6}
@@ -105,6 +121,7 @@ Value: Query                {QueryVal $1}
      | int                  {IntVal $1}
      | trueBool                 {BoolVal $1}
      | falseBool                 {BoolVal $1}
+     | identifier                {VarVal $1}
 
 Modifier: andBoolOp Value    {BoolOpModifier $1 $2}
         | orBoolOp Value     {BoolOpModifier $1 $2}
@@ -132,6 +149,7 @@ type Exp = [Statement]
 
 data Statement = Out String
                | VarAssign String Value [Modifier]
+               | Cond String String Condition
                deriving Show 
 
 data Query = SelectIF [String] String 
@@ -147,6 +165,7 @@ data Value = QueryVal Query
            | StringVal String
            | IntVal Int
            | BoolVal Bool
+           | VarVal String
            deriving Show
 
 data Modifier = BoolOpModifier String Value
@@ -156,5 +175,17 @@ data Modifier = BoolOpModifier String Value
 data Reference = SubjReference String
                | ObjReference String
                | PredReference String
-               deriving Show               
+               deriving Show  
+
+data Condition = MultCond Int 
+               | AddCond Int 
+               | MinusCond Int 
+               | DivCond Int 
+               | PowCond Int 
+               | ModCond Int 
+               | IntCond Int
+               | StrCond String
+               | BoolCond Bool
+               | TagCond String    
+               deriving Show             
 }

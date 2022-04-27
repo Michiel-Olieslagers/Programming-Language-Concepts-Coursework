@@ -14,6 +14,9 @@ $white+       ;
 \=            {\p s -> Assignment p}
 "true"        {\p s -> TrueBool True p}
 "false"       {\p s -> FalseBool False p}
+"SET"         {\p s -> Set p}
+"IN"          {\p s -> In p}
+"TO"          {\p s -> To p}
 \&&           {\p s -> AndBooleanOperator s p}
 "||"          {\p s -> OrBooleanOperator s p}
 \!            {\p s -> NotBooleanOperator s p}
@@ -35,7 +38,7 @@ $alpha [$alpha $digit]* \.Pred       {\p s -> ReferencePred (dropLast 5 s) p}
 "OUT"         {\p s -> Output p}
 \==           {\p s -> Equal s p}
 \!=           {\p s -> NotEqual s p}
-\< [$alpha $digit \_ \. \: \/]+ \>       {\p s -> Tag s p} 
+\< [$alpha $digit \_ \. \: \/ \#]+ \>       {\p s -> Tag s p} 
 \>            {\p s -> GreaterThan s p}
 \<            {\p s -> LessThan s p}
 \>=           {\p s -> GreaterThanEqual s p}
@@ -65,7 +68,7 @@ data Token =
   NotBooleanOperator         String AlexPosn |
   PlusNumericalOperator      String AlexPosn |
   MinusNumericalOperator     String AlexPosn |
-  MultiplyNumericalOperator     String AlexPosn |
+  MultiplyNumericalOperator  String AlexPosn |
   ModNumericalOperator       String AlexPosn |
   DivNumericalOperator       String AlexPosn |
   PowerNumericalOperator     String AlexPosn |
@@ -85,7 +88,10 @@ data Token =
   ReferenceSubj              String AlexPosn |
   ReferenceObj               String AlexPosn |
   ReferencePred              String AlexPosn |
-  Assignment                        AlexPosn 
+  Assignment                        AlexPosn |
+  Set                               AlexPosn |
+  In                                AlexPosn |
+  To                                AlexPosn
   deriving (Eq,Show) 
 
 

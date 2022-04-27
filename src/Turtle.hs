@@ -1,4 +1,4 @@
-module Turtle (getObj, getTriples,Triple,output,Obj, MaybTripl) where
+module Turtle (getObj, getTriples,Triple,finalOutput,Obj, MaybTripl) where
 
 import System.Environment
 import System.IO
@@ -22,16 +22,70 @@ getData (x:xs) = do var <- readFile x
                     rest <- getData xs
                     return (out var3:rest)
 
+finalOutput :: [MaybTripl] -> String
+finalOutput trpl = output (sortBy orderSubj trpl)
+
 output :: [MaybTripl] -> String
 output [] = []
-output ((Just t1, Just t2, Just t3):ts) = ("<" ++ t1 ++ "><" ++ t2 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
-output ((Just t1, Just t2, Nothing):ts) = ("<" ++ t1 ++ "><" ++ t2 ++ "> . \n") ++ output ts
-output ((Just t1, Nothing, Just t3):ts) = ("<" ++ t1 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
-output ((Nothing, Just t2, Just t3):ts) = ("<" ++ t2 ++ "><" ++ getObj t3 ++ "> . \n") ++ output ts
-output ((Just t1, Nothing, Nothing):ts) = ("<" ++ t1 ++ "> . \n") ++ output ts
-output ((Nothing, Just t2, Nothing):ts) = ("<" ++ t2 ++ "> . \n") ++ output ts
-output ((Nothing, Nothing, Just t3):ts) = ("<" ++ getObj t3 ++ "> . \n") ++ output ts
+output (t@(Just t1, Just t2, Just t3):ts) | (elem t ts) == False = ("<" ++ t1 ++ "><" ++ t2 ++ "> " ++ printObj t3 ++ " . \n") ++ output ts
+                                          | otherwise = output ts
+output (t@(Just t1, Just t2, Nothing):ts) | (elem t ts) == False = ("<" ++ t1 ++ "><" ++ t2 ++ "> . \n") ++ output ts
+                                          | otherwise = output ts
+output (t@(Just t1, Nothing, Just t3):ts) | (elem t ts) == False = ("<" ++ t1 ++ "> " ++ printObj t3 ++ " . \n") ++ output ts
+                                          | otherwise = output ts
+output (t@(Nothing, Just t2, Just t3):ts) | (elem t ts) == False = ("<" ++ t2 ++ "> " ++ printObj t3 ++ " . \n") ++ output ts
+                                          | otherwise = output ts
+output (t@(Just t1, Nothing, Nothing):ts) | (elem t ts) == False = ("<" ++ t1 ++ "> . \n") ++ output ts
+                                          | otherwise = output ts
+output (t@(Nothing, Just t2, Nothing):ts) | (elem t ts) == False = ("<" ++ t2 ++ "> . \n") ++ output ts
+                                          | otherwise = output ts
+output (t@(Nothing, Nothing, Just t3):ts) | (elem t ts) == False = (printObj t3 ++ " . \n") ++ output ts
+                                          | otherwise = output ts
 output (_:ts) = output ts
+
+orderSubj :: MaybTripl -> MaybTripl -> Ordering
+orderSubj trpl1@(subj1,pred1,obj1) trpl2@(subj2,pred2,obj2) | subj1 > subj2 = GT
+                                                            | subj1 < subj2 = LT
+                                                            | otherwise = orderPred trpl1 trpl2
+
+orderPred :: MaybTripl -> MaybTripl -> Ordering
+orderPred trpl1@(subj1,pred1,obj1) trpl2@(subj2,pred2,obj2) | pred1 > pred2 = GT
+                                                            | pred1 < pred2 = LT
+                                                            | otherwise = orderObj trpl1 trpl2
+
+orderObj :: MaybTripl -> MaybTripl -> Ordering
+orderObj trpl1@(subj1,pred1,Just (ObjURI x)) trpl2@(subj2,pred2,Just (ObjURI y)) | x > y = GT
+                                                                                 | x < y = LT
+                                                                                 | otherwise = EQ
+orderObj trpl1@(subj1,pred1,Just (ObjURI _)) trpl2@(subj2,pred2,Just (Num _)) = LT
+orderObj trpl1@(subj1,pred1,Just (ObjURI _)) trpl2@(subj2,pred2,Just (Bl _)) = LT
+orderObj trpl1@(subj1,pred1,Just (ObjURI _)) trpl2@(subj2,pred2,Just (Lit _)) = LT
+orderObj trpl1@(subj1,pred1,Just (Num x)) trpl2@(subj2,pred2,Just (Num y)) | x > y = GT
+                                                                           | x < y = LT
+                                                                           | otherwise = EQ
+orderObj trpl1@(subj1,pred1,Just (Num _)) trpl2@(subj2,pred2,Just (ObjURI _)) = GT
+orderObj trpl1@(subj1,pred1,Just (Num _)) trpl2@(subj2,pred2,Just (Bl _)) = LT
+orderObj trpl1@(subj1,pred1,Just (Num _)) trpl2@(subj2,pred2,Just (Lit _)) = LT
+orderObj trpl1@(subj1,pred1,Just (Bl x)) trpl2@(subj2,pred2,Just (Bl y)) | x > y = GT
+                                                                         | x < y = LT
+                                                                         | otherwise = EQ
+orderObj trpl1@(subj1,pred1,Just (Bl _)) trpl2@(subj2,pred2,Just (ObjURI _)) = GT
+orderObj trpl1@(subj1,pred1,Just (Bl _)) trpl2@(subj2,pred2,Just (Num _)) = GT
+orderObj trpl1@(subj1,pred1,Just (Bl _)) trpl2@(subj2,pred2,Just (Lit _)) = LT
+orderObj trpl1@(subj1,pred1,Just (Lit x)) trpl2@(subj2,pred2,Just (Lit y)) | x > y = GT
+                                                                           | x < y = LT
+                                                                           | otherwise = EQ
+orderObj trpl1@(subj1,pred1,Just (Lit _)) trpl2@(subj2,pred2,Just (ObjURI _)) = GT
+orderObj trpl1@(subj1,pred1,Just (Lit _)) trpl2@(subj2,pred2,Just (Num _)) = GT
+orderObj trpl1@(subj1,pred1,Just (Lit _)) trpl2@(subj2,pred2,Just (Bl _)) = GT
+
+printObj :: Obj -> String
+printObj (ObjURI x) = "<"++x++">"
+printObj (Lit x) = "\"" ++ x ++ "\""
+printObj (Num x) = show x
+printObj (Bl True) = "true"
+printObj (Bl False) = "false"
+printObj _ = error "Something has gone wrong"
 
 getObj :: Obj -> String
 getObj (ObjURI x) = x
