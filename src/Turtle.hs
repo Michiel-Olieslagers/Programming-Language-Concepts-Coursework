@@ -18,7 +18,9 @@ getData :: [String] -> IO [[Triple]]
 getData [] = return []
 getData (x:xs) = do var <- readFile x
                     let var2 = parseCalc (alexScanTokens var)
-                    let var3 = format var2 (getBase var2) (getPrefs var2)
+                    let base = getBase var2
+                    let prefs = getPrefs var2 base
+                    let var3 = format var2 base prefs
                     rest <- getData xs
                     return (out var3:rest)
 
@@ -115,11 +117,13 @@ getBase ((Tag _ _):es) = getBase es
 getBase ((PreDef _ _):es) = getBase es
 getBase ((BaseDef x):es) = Just x
 
-getPrefs :: Exp -> [(String, String)]
-getPrefs [] = []
-getPrefs ((Tag _ _):es) = getPrefs es
-getPrefs ((PreDef x y):es) = (x, y):getPrefs es
-getPrefs ((BaseDef _):es) = getPrefs es
+getPrefs :: Exp -> Maybe String -> [(String, String)]
+getPrefs [] _ = []
+getPrefs ((Tag _ _):es) base = getPrefs es base
+getPrefs ((PreDef x y@('h':'t':'t':'p':_)):es) base = (x, y):getPrefs es base
+getPrefs ((PreDef x y):es) base@(Just(b)) = (x, b ++ y):getPrefs es base
+getPrefs ((PreDef x y):es) Nothing = error "Base not defined in turtle file yet"
+getPrefs ((BaseDef _):es) base = getPrefs es base
 
 format :: Exp -> Maybe String -> [(String, String)] -> Exp
 format [] base prefs = []
