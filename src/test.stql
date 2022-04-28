@@ -1,0 +1,3 @@
+var1 = SELECT Subj Pred Obj FROM foo.ttl
+var2 = SELECT Subj Pred Obj FROM bar.ttl WHERE Subj == var1.Obj
+OUT var2
