@@ -1,0 +1,2 @@
+var21 = SELECT Subj Pred Obj FROM foo.ttl WHERE Subj == <http://www.cw.org/#problem2> && Obj == true
+OUT var21

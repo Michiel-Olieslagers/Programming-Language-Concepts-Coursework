@@ -1,0 +1,4 @@
+var41 = SELECT Subj FROM bar.ttl
+var42 = SELECT Subj FROM foo.ttl
+var43 = SELECT Subj Pred Obj FROM foo.ttl WHERE Obj == var41.Subj + SELECT Subj Pred Obj FROM bar.ttl WHERE Obj == var42.Subj 
+OUT var43
