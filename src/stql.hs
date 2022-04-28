@@ -27,54 +27,51 @@ getTokens = do path <- getArgs
                let lexVar = alexScanTokens contents
                let parseVar = parseCalc lexVar
                str <- parse [] parseVar
-               --turt <- select "foo.ttl"
-               --print lexVar
-               --print turt
                putStr str
 
 parse :: [(String, Vals)] -> Exp -> IO String
 parse _ [] = error "File does not end in an output."
 parse vars (VarAssign var query mods:ts) = do newVars <- assign vars var query mods
                                               parse (vars ++ [newVars]) ts
-parse vars (Out var:[]) = return (out (getVars vars var))
+parse vars [Out var] = return (out (getVars vars var))
 parse vars (Out var:ls) = error "File should end in an OUT statement"
 parse vars (Cond item var cond:ts) = do let newVars = set vars var item cond
                                         parse newVars ts
 
 set :: [(String, Vals)] -> String -> String -> Condition -> [(String, Vals)]
 set [] var item cond = error "Variable is not defined"
-set (var@(str,Trpl vals):vars) vr "Obj" cond | vr == str = ((vr,Trpl (checkObj vals cond)):vars)
-                                             | otherwise = (var:set vars vr "Obj" cond)
-set (var@(str,Trpl vals):vars) vr "Pred" cond | vr == str = ((vr,Trpl (checkPred vals cond)):vars)
-                                              | otherwise = (var:set vars vr "Pred" cond)
-set (var@(str,Trpl vals):vars) vr "Subj" cond | vr == str = ((vr,Trpl (checkSubj vals cond)):vars)
-                                              | otherwise = (var:set vars vr "Subj" cond)
+set (var@(str, Trpl vals):vars) vr "Obj" cond | vr == str = (vr, Trpl (checkObj vals cond)):vars
+                                             | otherwise = var:set vars vr "Obj" cond
+set (var@(str, Trpl vals):vars) vr "Pred" cond | vr == str = (vr, Trpl (checkPred vals cond)):vars
+                                              | otherwise = var:set vars vr "Pred" cond
+set (var@(str, Trpl vals):vars) vr "Subj" cond | vr == str = (vr, Trpl (checkSubj vals cond)):vars
+                                              | otherwise = var:set vars vr "Subj" cond
 
 checkObj :: [MaybTripl] -> Condition -> [MaybTripl]
 checkObj [] _ = []
-checkObj (t@(t1,t2,Nothing):ts) _ = error "Cannot change values when object has not been selected in variable."
-checkObj (t@(t1,t2,Just(t3)):ts) cond@(IntCond int) = ((t1,t2,Just(Num int)):checkObj ts cond)
-checkObj (t@(t1,t2,Just(t3)):ts) cond@(StrCond string) = ((t1,t2,Just(Lit string)):checkObj ts cond)
-checkObj (t@(t1,t2,Just(t3)):ts) cond@(BoolCond bl) = ((t1,t2,Just(Bl bl)):checkObj ts cond)
-checkObj (t@(t1,t2,Just(t3)):ts) cond@(TagCond tag) = ((t1,t2,Just(ObjURI (removeLast(tail tag)))):checkObj ts cond)
-checkObj (t@(t1,t2,Just(Num t3)):ts) cond@(AddCond int) = ((t1,t2,Just(Num (t3+int))):checkObj ts cond)
-checkObj (t@(t1,t2,Just(Num t3)):ts) cond@(MultCond int) = ((t1,t2,Just(Num (t3*int))):checkObj ts cond)
-checkObj (t@(t1,t2,Just(Num t3)):ts) cond@(ModCond int) = ((t1,t2,Just(Num (t3 `mod` int))):checkObj ts cond)
-checkObj (t@(t1,t2,Just(Num t3)):ts) cond@(DivCond int) = ((t1,t2,Just(Num (t3 `div` int))):checkObj ts cond)
-checkObj (t@(t1,t2,Just(Num t3)):ts) cond@(PowCond int) = ((t1,t2,Just(Num (t3^int))):checkObj ts cond)
-checkObj (t@(t1,t2,Just(Num t3)):ts) cond@(MinusCond int) = ((t1,t2,Just(Num (t3-int))):checkObj ts cond)
+checkObj (t@(t1, t2, Nothing):ts) _ = error "Cannot change values when object has not been selected in variable."
+checkObj (t@(t1, t2, Just t3):ts) cond@(IntCond int) = (t1, t2, Just(Num int)):checkObj ts cond
+checkObj (t@(t1, t2, Just t3):ts) cond@(StrCond string) = (t1, t2, Just(Lit string)):checkObj ts cond
+checkObj (t@(t1, t2, Just t3):ts) cond@(BoolCond bl) = (t1, t2, Just(Bl bl)):checkObj ts cond
+checkObj (t@(t1, t2, Just t3):ts) cond@(TagCond tag) = (t1, t2, Just(ObjURI (removeLast(tail tag)))):checkObj ts cond
+checkObj (t@(t1, t2, Just(Num t3)):ts) cond@(AddCond int) = (t1, t2, Just(Num (t3 + int))):checkObj ts cond
+checkObj (t@(t1, t2, Just(Num t3)):ts) cond@(MultCond int) = (t1, t2, Just(Num (t3 * int))):checkObj ts cond
+checkObj (t@(t1, t2, Just(Num t3)):ts) cond@(ModCond int) = (t1, t2, Just(Num (t3 `mod` int))):checkObj ts cond
+checkObj (t@(t1, t2, Just(Num t3)):ts) cond@(DivCond int) = (t1, t2, Just(Num (t3 `div` int))):checkObj ts cond
+checkObj (t@(t1, t2, Just(Num t3)):ts) cond@(PowCond int) = (t1, t2, Just(Num (t3 ^ int))):checkObj ts cond
+checkObj (t@(t1, t2, Just(Num t3)):ts) cond@(MinusCond int) = (t1, t2, Just(Num (t3 - int))):checkObj ts cond
 
 checkPred :: [MaybTripl] -> Condition -> [MaybTripl]
 checkPred [] _ = []
-checkPred (t@(t1,Nothing,t3):ts) _ = error "Cannot change values when object has not been selected in variable."
-checkPred (t@(t1,Just(t2),t3):ts) cond@(TagCond tag) = ((t1,Just(removeLast(tail tag)),t3):checkPred ts cond)
-checkPred (t@(t1,Just(t2),t3):ts) cond = error "Cannot change values of subject to anything but tags."
+checkPred (t@(t1, Nothing, t3):ts) _ = error "Cannot change values when object has not been selected in variable."
+checkPred (t@(t1, Just t2, t3):ts) cond@(TagCond tag) = (t1, Just(removeLast(tail tag)), t3):checkPred ts cond
+checkPred (t@(t1, Just t2, t3):ts) cond = error "Cannot change values of subject to anything but tags."
 
 checkSubj :: [MaybTripl] -> Condition -> [MaybTripl]
 checkSubj [] _ = []
-checkSubj (t@(Nothing,t2,t3):ts) _ = error "Cannot change values when object has not been selected in variable."
-checkSubj (t@(Just(t1),t2,t3):ts) cond@(TagCond tag) = ((Just(removeLast(tail tag)),t2,t3):checkSubj ts cond)
-checkSubj (t@(t1,t2,t3):ts) cond = error "Cannot change values of subject to anything but tags."
+checkSubj (t@(Nothing, t2, t3):ts) _ = error "Cannot change values when object has not been selected in variable."
+checkSubj (t@(Just t1, t2, t3):ts) cond@(TagCond tag) = (Just(removeLast(tail tag)), t2, t3):checkSubj ts cond
+checkSubj (t@(t1, t2, t3):ts) cond = error "Cannot change values of subject to anything but tags."
 
 out :: Vals -> String
 out (Trpl triple) = finalOutput triple
@@ -94,22 +91,22 @@ getVars (e:es) var | fst e == var = snd e
 
 assign :: [(String, Vals)] -> String -> Value -> [Modifier] -> IO (String, Vals)
 assign vars var (QueryVal query) [] = do triples <- getQuery query vars
-                                         return ((var, Trpl triples))
-assign vars var (StringVal string) [] = return ((var, Str string))
-assign vars var (IntVal int) [] = return ((var, Numbr int))
-assign vars var (BoolVal bl) [] = return ((var, TOF bl))
-assign vars var (VarVal vr) [] = return ((var, getVars vars vr))
+                                         return (var, Trpl triples)
+assign vars var (StringVal string) [] = return (var, Str string)
+assign vars var (IntVal int) [] = return (var, Numbr int)
+assign vars var (BoolVal bl) [] = return (var, TOF bl)
+assign vars var (VarVal vr) [] = return (var, getVars vars vr)
 assign vars var (QueryVal query) ((NumOpModifier "+" val@(QueryVal _)):ms) = do triples <- getQuery query vars
                                                                                 others <- assign vars var val ms
-                                                                                return ((var, combine (Trpl triples) (snd others)))
+                                                                                return (var, combine (Trpl triples) (snd others))
 assign vars var (StringVal string) ((NumOpModifier "+" val@(StringVal _)):ms) = do others <- assign vars var val ms
-                                                                                   return ((var, combine (Str string) (snd others)))
+                                                                                   return (var, combine (Str string) (snd others))
 assign vars var (IntVal int) ((NumOpModifier "+" val@(IntVal _)):ms) = do others <- assign vars var val ms
-                                                                          return ((var, combine (Numbr int) (snd others)))
+                                                                          return (var, combine (Numbr int) (snd others))
 assign vars var (BoolVal bl) ((NumOpModifier "+" val@(BoolVal _)):ms) = do others <- assign vars var val ms
-                                                                           return ((var, combine (TOF bl) (snd others)))
+                                                                           return (var, combine (TOF bl) (snd others))
 assign vars var (VarVal vr) ((NumOpModifier "+" val@(VarVal _)):ms) = do others <- assign vars var val ms
-                                                                         return ((var, combine (getVars vars vr) (snd others)))
+                                                                         return (var, combine (getVars vars vr) (snd others))
 
 getQuery :: Query -> [(String, Vals)] -> IO [MaybTripl]
 getQuery (SelectIF fields file) vars = do triples <- select file
@@ -122,7 +119,7 @@ combine :: Vals -> Vals -> Vals
 combine (Trpl val1) (Trpl val2) = Trpl (val1 ++ val2)
 combine (TOF val1) (TOF val2) = TOF (val1 || val2)
 combine (Str val1) (Str val2) = Str (val1 ++ val2)
-combine (Numbr val1) (Numbr val2) = Numbr (val1 + val2) 
+combine (Numbr val1) (Numbr val2) = Numbr (val1 + val2)
 
 whr :: [MaybTripl] -> Predicate -> [(String, Vals)] -> [MaybTripl]
 whr triples (PredICS "Pred" o item) vars = filtr triples (Pred (removeLast (tail item))) (readOp o)
